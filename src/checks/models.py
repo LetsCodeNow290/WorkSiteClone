@@ -23,4 +23,13 @@ class RSIBag(models.Model):
     incident_number = models.CharField(max_length=20)
     hospital = models.CharField(max_length=50)
     contact_EMS_Chief_date_and_time = models.CharField(max_length=50)
+
+class NarcBox(models.Model):
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    record_date = models.DateTimeField(auto_now=True)
+    seal_number = models.IntegerField()
+    incident_number = models.CharField(max_length=20)
+    hospital = models.CharField(max_length=50) 
+
+    # Not yet migrated
     
