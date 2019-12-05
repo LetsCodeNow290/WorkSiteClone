@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content_too %}
+  <div class="col-md-4">
+    <div class="content-section">
+        <h3>Item Selection</h3>
+        <p 
+        <ul class="list-group">
+            <a class="list-group-item list-group-item-light" href="{% url 'medic_unit' %}" >View All Medic Units</a>
+            <a class="list-group-item list-group-item-light" href="{% url "add_medic_unit" %}" >Add a Medic Unit</a>
+            <a class="list-group-item list-group-item-light" href="{% url 'drugs' %}" >View all drugs</a>
+            <a class="list-group-item list-group-item-light" href="{% url 'add_drug' %}" >Add a drug</a>
+        </ul>
+        </p>
+{% endblock %}

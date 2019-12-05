@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content_too %}
+  <div class="col-md-4">
+    <div class="content-section">
+        <h3>Pass On Actions</h3>
+        <p 
+        <ul class="list-group">
+            <a class="list-group-item list-group-item-light" href="{% url 'blog_create' %}" >Create Posts</a>
+            <li class="list-group-item list-group-item-light">Search Posts, not yet functional</li>
+            <li class="list-group-item list-group-item-light">etc</li>
+        </ul>
+        </p>
+{% endblock %}

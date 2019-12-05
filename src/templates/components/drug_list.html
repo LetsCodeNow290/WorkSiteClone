@@ -1,0 +1,20 @@
+{% extends 'components/manage_base.html' %}
+
+{% block content %}
+<div>
+    <h2>All of the Drugs in the Safe</h2>
+     {% for drug in object_list %}
+        <article class="media content-section">
+            <img class="rounded-circle article-img" src="{{ drug.image.url }}">
+            <div class="media-body">
+                <h2 class="article-title">{{ drug }}</a></h2>
+            </div>
+            <div>
+            <a class="btn btn-secondary btm-sm mt-1 mb-1" href="{% url 'drug_update' drug.id %}">Update</a>
+            </div>
+            </article>
+
+    {% endfor %}
+
+</div>
+{% endblock %}

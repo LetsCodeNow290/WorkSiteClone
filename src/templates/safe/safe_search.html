@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+    <form action="" method="get">
+        {{ filter.form|crispy }}
+        <input type="submit" />
+    </form>
+    <div>
+    {% for obj in filter.qs %}
+        <li>{{ obj.user }} | {{ obj.date_created}} | Removed: {{ obj.amount_removed }} | Added: {{ obj.amount_added }} | Incident Number: {{ obj.incident_number }} | Patient Name: {{ obj.patient_name }} | Unit: {{ obj.medic_unit }} | Free Text: {{ obj.free_text }}</li>
+    {% endfor %}
+</div>
+{% endblock %}

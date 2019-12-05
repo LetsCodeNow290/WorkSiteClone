@@ -1,0 +1,15 @@
+{% extends 'safe/safe_base.html' %}
+
+{% block content %}
+<div>
+    <h2>Narcotic Safe Home Page</h2>
+    {% for key, value in drugs.items %}
+        <article class="media content-section">
+            <div class="media-body">
+                <h4 class="article-title">{{ key }} : {{ value }}mg</h4>
+            </div>
+            </article>
+
+    {% endfor %}
+</div>
+{% endblock %}

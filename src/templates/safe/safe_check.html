@@ -1,0 +1,35 @@
+{% extends 'safe/safe_base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+{% now "SHORT_DATE_FORMAT" as the_date %}
+<div>
+    <h2>Current Narcotic Safe Count</h2>
+    {% for drug_key, drug_value in object_list.items %}
+        {% for date_key, date_value in date_list.items %}
+            {% if date_key == drug_key %}
+            {% if the_date == date_value|date:"SHORT_DATE_FORMAT" %}
+                <table>
+                <p>{{ drug_key }} : {{ drug_value }}mg, Last checked on {{ date_value|date:"SHORT_DATE_FORMAT" }}</p>
+                </table>
+            {% else %}
+                <table>
+                <p style=color:red>{{ drug_key }} : {{ drug_value }}mg, Last checked on {{ date_value|date:"SHORT_DATE_FORMAT" }}</p>
+                </table>
+            {% endif %}
+            {% endif %}
+    {% endfor %}
+    {% endfor %}    
+</div>
+<div class='content-section'>
+    <form method="POST"> 
+        {% csrf_token %}
+        <fieldset class='form-group'>
+            <legend class="border-bottom mb-4">Check</legend>
+                        {{ form|crispy }}
+        </fieldset>
+       <div class="form-group">
+            <button class='btn btn-outline-info' type='submit'>Submit</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

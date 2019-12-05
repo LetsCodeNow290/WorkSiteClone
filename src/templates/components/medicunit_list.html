@@ -1,0 +1,21 @@
+{% extends 'components/manage_base.html' %}
+
+{% block content %}
+<div>
+    <h2>All of the Medic Units</h2>
+     {% for unit in object_list %}
+        <article class="media content-section">
+            <img class="rounded-circle article-img" src="{{ unit.image.url }}">
+            <div class="media-body">
+                <h2><a class="article-title" href="{% url 'medic_unit_detail' unit.id %}">{{ unit }}</a></h2>
+                <div class="article-metadata">
+                <p class="article-content">Property Number: {{ unit.property_number }}</p>
+                <p class="article-content">{{ unit.year }} {{ unit.make }} {{ unit.model }}</p>
+                <p class="article-content">Mileage: {{ unit.mileage }}</p>
+            </div>
+            </article>
+
+    {% endfor %}
+
+</div>
+{% endblock %}

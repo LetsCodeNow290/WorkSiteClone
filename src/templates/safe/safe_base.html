@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content_too %}
+  <div class="col-md-4">
+    <div class="content-section">
+        <h3>Narc Safe Actions</h3>
+        <p 
+        <ul class="list-group">
+            <a class="list-group-item list-group-item-light" href="{% url 'safe_check_view' %}" >Daily Check</a>
+            <a class="list-group-item list-group-item-light" href="{% url 'safe_remove_view' %}" >Distribute Medication</a>
+            <a class="list-group-item list-group-item-light" href="{% url 'safe_add_view' %}" >Add Medication to the Database</a>
+            <a class="list-group-item list-group-item-light" href="{% url 'safe_search_view' %}" >History list</a>
+        </ul>
+        </p>
+{% endblock %}

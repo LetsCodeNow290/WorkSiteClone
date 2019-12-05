@@ -1,0 +1,20 @@
+{% extends 'components/manage_base.html' %}
+
+{% block content %}
+<div>
+    <article class="media content-section">
+        <img class="rounded-circle article-img" src="{{ object.image.url }}">
+        <div class="media-body">
+            <h2 class="article-title" >{{ object }}</h2>
+            <div class="article-metadata">
+            <p class="article-content">Property Number: {{ object.property_number }}</p>
+            <p class="article-content">{{ object.year }} {{ object.make }} {{ object.model }}</p>
+            <p class="article-content">Mileage: {{ object.mileage }}</p>
+            <div>
+            <a class="btn btn-secondary btm-sm mt-1 mb-1" href="{% url 'medic_unit_update' object.id %}">Update</a>
+        </div>
+        </div>
+        </article>
+
+</div>
+{% endblock %}
