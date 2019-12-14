@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'components.apps.ComponentsConfig',
     'home.apps.HomeConfig',
     'safe.apps.SafeConfig',
+    'tablet.apps.TabletConfig',
 ]
 
 MIDDLEWARE = [

@@ -11,7 +11,7 @@
                 <div class="article-metadata">
                 <a class="mr-2" href="{% url 'user_posts' post.author.username %}">{{ post.author }}</a>
                 </div>
-                <h2><a class="article-title" href="{% url 'blog_detail' post.id %}">{{ post.title }} {{ post.date_posted }}</a></h2>
+                <h2><a class="article-title" href="{% url 'blog_detail' post.id %}">{{ post.title }} {{ post.date_posted|date:"DATE_FORMAT" }}</a></h2>
                 <p class="article-content">{{ post.content }}</p>
             </div>
             </article>

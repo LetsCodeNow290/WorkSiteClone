@@ -6,7 +6,7 @@
         <div class="media-body">
             <div class="article-metadata">
             <a class="mr-2" href="{% url 'user_posts' object.author.username %}">{{ object.author }}</a>
-            <small class="text-muted">{{ object.date_posted }}</small>
+            <small class="text-muted">{{ object.date_posted|date:"DATE_FORMAT" }}</small>
             {% if object.author == user %}
             <div>
                 <a class="btn btn-secondary btm-sm mt-1 mb-1" href="{% url 'blog_update' object.id %}">Update</a>
@@ -14,7 +14,7 @@
             </div>
             {% endif %}
             </div>
-            <h2 class="article-title">{{ object.title }} {{ object.date_posted }}</h2>
+            <h2 class="article-title">{{ object.title }} {{ object.date_posted|date:"DATE_FORMAT" }}</h2>
             <p class="article-content">{{ object.content }}</p>
         </div>
         </article>

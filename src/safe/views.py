@@ -1,6 +1,6 @@
 from django.shortcuts import render, render_to_response
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, AccessMixin
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
@@ -17,17 +17,18 @@ import django_filters
 
 
 # Create your views here.
+
+
 @login_required
+@permission_required('safe.can_view')
 def safe_home_view(request):
     drugs = Safe.calc_total(Safe)
     context = {'drugs' : drugs}
     return render(request, 'safe/safe_home.html', context)
 
-
-def safe_remove_view(request):
-    return render(request, 'safe/safe_remove.html')
-
-class AddDrug(LoginRequiredMixin,CreateView):
+class AddDrug(LoginRequiredMixin, PermissionRequiredMixin ,CreateView, AccessMixin):
+    permission_required = ('can_add',)
+    raise_exception = False
     model = Safe
     template_name_suffix = '_add'
     fields = ['drug_name', 'amount_added', 'free_text']
@@ -86,18 +87,9 @@ class CheckDrug(LoginRequiredMixin,CreateView):
         form.fields['amount_in_safe'].required = True
         return form
 
-class SearchDrug(LoginRequiredMixin,ListView):
-    model: Safe
-    template_name_suffix = '_search'
-
-    def get_queryset(self):
-        query = self.request.GET.get('q')
-        object_list = Safe.objects.filter(Q(drug_name__name__icontains=query))
-        return object_list
-
 @login_required
 def search_drug(request):
-    f = DrugSearch(request.GET, queryset=Safe.objects.all().order_by('-date_created'))
-    return render(request, 'safe/safe_search.html', {'filter' : f })
+    form = DrugSearch(request.GET, queryset=Safe.objects.all().order_by('-date_created'))
+    return render(request, 'safe/safe_search.html', {'filter' : form })
 
 

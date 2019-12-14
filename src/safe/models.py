@@ -18,6 +18,13 @@ class Safe(models.Model):
     medic_unit = models.ForeignKey('components.MedicUnit', related_name='medic_unit', on_delete=models.PROTECT, blank=True, null=True)
     free_text = models.TextField(default='', blank =True)
    
+    class Meta:
+        permissions = (
+            ('can_view', "Fuck You"),
+            ('can_add', 'Add to the Safe')
+            )
+        
+
     def calc_total(self):
         add = 0
         sub = 0

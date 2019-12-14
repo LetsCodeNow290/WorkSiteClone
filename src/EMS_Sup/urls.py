@@ -21,7 +21,7 @@ from django.contrib.auth.views import LoginView, LogoutView
 from blog.views import blog_view, PostListView, PostDetailView, PostCreateView, PostUpdateView, PostDeleteView, UserPostListView
 from home.views import home_view
 from checks.views import check_home_view, daily_view, weekly_view
-from safe.views import safe_home_view, AddDrug, SubDrug, CheckDrug, SearchDrug, search_drug
+from safe.views import safe_home_view, AddDrug, SubDrug, CheckDrug, search_drug
 from components.views import component_home_view, add_drug, add_medic_unit, profile, register, UnitUpdateView, UnitListView, UnitDetailView, DrugListView, DrugUpdateView
 
 
