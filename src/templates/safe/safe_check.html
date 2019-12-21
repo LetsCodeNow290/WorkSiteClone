@@ -5,6 +5,7 @@
 <div>
     <h2>Current Narcotic Safe Count</h2>
     {% for drug_key, drug_value in object_list.items %}
+    {% if drug_key.is_active_safe %}
         {% for date_key, date_value in date_list.items %}
             {% if date_key == drug_key %}
             {% if the_date == date_value|date:"SHORT_DATE_FORMAT" %}
@@ -18,6 +19,7 @@
             {% endif %}
             {% endif %}
     {% endfor %}
+    {% endif %}
     {% endfor %}    
 </div>
 <div class='content-section'>

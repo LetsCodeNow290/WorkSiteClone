@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
-from .models import MedicUnit, Drug
-from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, UnitAddForm, DrugAddForm
+from .models import MedicUnit, Drug, Vehicle
+from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, VehicleAddForm, DrugAddForm
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
@@ -13,30 +13,48 @@ def component_home_view(request):
     return render(request, 'components/manage.html')
 
 @login_required
-def add_medic_unit(request):
+def add_vehicle(request):
     if request.method == 'POST':
-        form = UnitAddForm(request.POST or None)
+        form = VehicleAddForm(request.POST or None)
         if form.is_valid():
             form.save()
-            unit_number = form.cleaned_data.get('unit_number')
-            messages.success(request, f"Medic {unit_number} added to the database")
+            property_number = form.cleaned_data.get('property_number')
+            messages.success(request, f"Vehicle {property_number} added to the database")
             return redirect('component_home_view')
     else:
-        form = UnitAddForm()
-    return render(request, 'components/medicunit_add.html', {'form': form})
+        form = VehicleAddForm()
+    return render(request, 'components/vehicle_add.html', {'form': form})
 
 class UnitListView(LoginRequiredMixin, ListView):
-    model = MedicUnit
+    model = Vehicle
     ordering = ['unit_number']
 
 class UnitDetailView(LoginRequiredMixin, DetailView):
-    model = MedicUnit
+    model = Vehicle
 
 
 class UnitUpdateView(LoginRequiredMixin,UpdateView):
+    model = Vehicle
+    fields = ['unit_number', 'property_number', 'make', 'model', 'year', 'mileage', 'image']
+    # This next line redirects the page to the blog home page.
+    success_url = '/manage/medic_unit'
+
+class MedicAddView(LoginRequiredMixin, CreateView):
     model = MedicUnit
-    fields = ['property_number', 'make', 'model', 'year', 'mileage', 'image']
-    # This next line redirects the page to the blog home page. Right now it doesn't work because the url will not reset
+    fields = ['unit_name', 'is_active']
+    template_name_suffix = '_add'
+
+class MedicListView(LoginRequiredMixin, ListView):
+    model = MedicUnit
+    ordering = ['unit_number']
+
+class MedicDetailView(LoginRequiredMixin, DetailView):
+    model = MedicUnit
+
+class MedicUpdateView(LoginRequiredMixin,UpdateView):
+    model = MedicUnit
+    fields = ['unit_name', 'is_active']
+    # This next line redirects the page to the blog home page.
     success_url = '/manage/medic_unit'
 
 @login_required
@@ -57,7 +75,7 @@ class DrugListView(LoginRequiredMixin, ListView):
 
 class DrugUpdateView(LoginRequiredMixin,UpdateView):
     model = Drug
-    fields = ['image', 'is_active']
+    fields = ['image', 'is_active_safe', 'is_active_unit']
     # This next line redirects the page to the blog home page
     success_url = '/manage/drugs'
 

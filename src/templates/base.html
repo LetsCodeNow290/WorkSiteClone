@@ -19,7 +19,7 @@
             {% if request.user.is_anonymous == True %}
             <a class="navbar-brand mr-4" href="/">EMS Supervisors / Logged Out</a>
             {% else %}
-            <a class="navbar-brand mr-4" href="/">EMS Supervisors / {{ request.user }}</a>
+            <a class="navbar-brand mr-4" href="/">EMS Supervisors / {{ request.user|title }}</a>
             {% endif %}
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>

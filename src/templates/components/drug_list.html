@@ -8,6 +8,12 @@
             <img class="rounded-circle article-img" src="{{ drug.image.url }}">
             <div class="media-body">
                 <h2 class="article-title">{{ drug }}</a></h2>
+                {% if drug.is_active_safe == True or drug.is_active_unit == True %}
+                <li> Is active in the safe: {{ drug.is_active_safe }}</li>
+                <li> Is active in the medic unit: {{ drug.is_active_unit }}</li>
+                {% elif drug.is_active_safe == False and drug.is_active_unit == False %}
+                <p style='font-weight: bold; font-family: Courier; color:darkred' >{{ drug }} is not active</p>
+                {% endif %}
             </div>
             <div>
             <a class="btn btn-secondary btm-sm mt-1 mb-1" href="{% url 'drug_update' drug.id %}">Update</a>

@@ -20,9 +20,10 @@ from django.conf.urls.static import static
 from django.contrib.auth.views import LoginView, LogoutView
 from blog.views import blog_view, PostListView, PostDetailView, PostCreateView, PostUpdateView, PostDeleteView, UserPostListView
 from home.views import home_view
+from checks.views import checkAdd
 from checks.views import check_home_view, daily_view, weekly_view
 from safe.views import safe_home_view, AddDrug, SubDrug, CheckDrug, search_drug
-from components.views import component_home_view, add_drug, add_medic_unit, profile, register, UnitUpdateView, UnitListView, UnitDetailView, DrugListView, DrugUpdateView
+from components.views import component_home_view, add_drug, add_vehicle, profile, register, UnitUpdateView, UnitListView, UnitDetailView, DrugListView, DrugUpdateView, MedicAddView
 
 
 
@@ -37,7 +38,7 @@ urlpatterns = [
     path('login/', LoginView.as_view(template_name='components/login.html'), name='login'),
     path('logout/', LogoutView.as_view(template_name='components/logout.html'), name='logout'),
     path('checks/', check_home_view, name='check_home_view'),
-    path('checks/daily/', daily_view, name='daily'),
+    path('checks/daily/', checkAdd.as_view(), name='daily'),
     path('checks/weekly/', weekly_view, name='weekly'),
     path('safe/', safe_home_view, name='safe_home_view'),
     path('safe/check/', CheckDrug.as_view(), name='safe_check_view'),
@@ -45,10 +46,11 @@ urlpatterns = [
     path('safe/remove/', SubDrug.as_view(), name='safe_remove_view'),
     path('safe/search/', search_drug, name='safe_search_view'),
     path('manage/', component_home_view, name='component_home_view'),
-    path('manage/medic_unit/', UnitListView.as_view(), name='medic_unit'),
-    path('manage/medic_unit/<int:pk>/', UnitDetailView.as_view(), name='medic_unit_detail'),
-    path('manage/medic_unit/add', add_medic_unit, name='add_medic_unit'),
-    path('manage/medic_unit/<int:pk>/update/', UnitUpdateView.as_view(), name='medic_unit_update'),
+    path('manage/medic_unit/add', MedicAddView.as_view(), name='medic_unit_add'),
+    path('manage/vehicle/', UnitListView.as_view(), name='vehicle'),
+    path('manage/vehicle/<int:pk>/', UnitDetailView.as_view(), name='vehicle_detail'),
+    path('manage/vehicle/add', add_vehicle, name='vehicle_add'),
+    path('manage/vehicle/<int:pk>/update/', UnitUpdateView.as_view(), name='vehicle_update'),
     path('manage/drugs/<int:pk>/update/', DrugUpdateView.as_view(), name='drug_update'),
     path('manage/drugs/add', add_drug, name='add_drug'),
     path('manage/drugs/', DrugListView.as_view(), name='drugs'),

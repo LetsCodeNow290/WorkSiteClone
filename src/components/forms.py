@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .models import UserProfile, MedicUnit, Drug
+from .models import UserProfile, MedicUnit, Drug, Vehicle
 
 class UserRegisterForm(UserCreationForm):
     email = forms.EmailField()
@@ -22,9 +22,9 @@ class ProfileUpdateForm(forms.ModelForm):
         model = UserProfile
         fields = ['image']
 
-class UnitAddForm(forms.ModelForm):
+class VehicleAddForm(forms.ModelForm):
     class Meta:
-        model = MedicUnit
+        model = Vehicle
         fields = ['unit_number', 'property_number', 'year', 'make', 'model', 'mileage']
 
 class DrugAddForm(forms.ModelForm):

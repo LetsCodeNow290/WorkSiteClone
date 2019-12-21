@@ -6,7 +6,8 @@ from django.contrib.auth.models import User
 class DailyCheck(models.Model):
     user = models.ForeignKey(User, on_delete=models.PROTECT)
     record_date = models.DateTimeField(auto_now=True)
-    medic_unit_number = models.ForeignKey('components.MedicUnit', related_name='medic_unit_number', on_delete=models.PROTECT)
+    medic_unit_number = models.ForeignKey('components.MedicUnit', related_name='medic_unit_number', on_delete=models.PROTECT, default='')
+    unit_property_number = models.ForeignKey('components.Vehicle', related_name='unit_property_number', on_delete=models.PROTECT, default='')
     emergency_lights = models.BooleanField()
     driving_lights = models.BooleanField()
     red_bag = models.BooleanField()
@@ -16,13 +17,16 @@ class DailyCheck(models.Model):
     Suction = models.BooleanField()
     oxygen = models.BooleanField()
 
+    #Need to fix all the templates for the vehicles
+
 class RSIBag(models.Model):
     user = models.ForeignKey(User, on_delete=models.PROTECT)
     record_date = models.DateTimeField(auto_now=True)
     seal_number = models.IntegerField()
     incident_number = models.CharField(max_length=20)
     hospital = models.CharField(max_length=50)
-    contact_EMS_Chief_date_and_time = models.CharField(max_length=50)
+    contact_EMS_Chief = models.CharField(max_length=100, default='')
+    free_text = models.TextField(default='')
 
 class NarcBox(models.Model):
     user = models.ForeignKey(User, on_delete=models.PROTECT)
@@ -31,6 +35,5 @@ class NarcBox(models.Model):
     incident_number = models.CharField(max_length=20)
     hospital = models.CharField(max_length=50) 
 
-    # Not yet migrated
     
     
