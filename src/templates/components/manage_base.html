@@ -6,10 +6,15 @@
         <h3>Item Selection</h3>
         <p 
         <ul class="list-group">
-            <a class="list-group-item list-group-item-light" href="#" >View All Medic Units</a>
+            <a class="list-group-item list-group-item-light" href="{% url "medic_unit" %}" >View All Medic Units</a>
             <a class="list-group-item list-group-item-light" href="{% url "medic_unit_add" %}" >Add a Medic Unit</a>
             <a class="list-group-item list-group-item-light" href="{% url 'drugs' %}" >View all drugs</a>
             <a class="list-group-item list-group-item-light" href="{% url 'add_drug' %}" >Add a drug</a>
+            <a class="list-group-item list-group-item-light" href="{% url 'vehicle_add' %}" >Add a Vehicle</a>
+            <a class="list-group-item list-group-item-light" href="{% url 'vehicle' %}" >View all vehicles</a>
+            <a class="list-group-item list-group-item-light" href="#" >Add a Tablet</a>
+            <a class="list-group-item list-group-item-light" href="#" >View all Tablets</a>
+
         </ul>
         </p>
 {% endblock %}

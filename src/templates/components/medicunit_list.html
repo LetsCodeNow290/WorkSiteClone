@@ -1,0 +1,19 @@
+{% extends 'components/manage_base.html' %}
+
+{% block content %}
+<div>
+    <h2>All of the Medic Units</h2>
+     {% for unit in object_list %}
+        <article class="media content-section">
+            <div class="media-body">
+                <h2><a class="article-title" href="#">{{ unit_name }}</a></h2>
+                <div class="article-metadata">
+                <p style="font-size: large;" class="article-content">{{ unit.unit_name }}</p>
+                <p class="article-content">Active unit: {{ unit.is_active}}</p>
+            </div>
+            </article>
+
+    {% endfor %}
+
+</div>
+{% endblock %}

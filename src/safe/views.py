@@ -56,7 +56,7 @@ class SubDrug(LoginRequiredMixin,CreateView):
         'free_text'
         ]
     success_url = '/safe'
-
+# These bits of code are making the "amount removed" category required
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)

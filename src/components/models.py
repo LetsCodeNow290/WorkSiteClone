@@ -2,6 +2,9 @@ from django.db import models
 from django.contrib.auth.models import User
 from PIL import Image
 from django.urls import reverse
+from checks.models import DailyCheck
+from django.db.models import Max
+
 
 
 # Create your models here.
@@ -63,6 +66,9 @@ class Vehicle(models.Model):
     date_created = models.DateField(auto_now=True)
     mileage = models.IntegerField(default='0')
  
+    def __str__(self):
+        return str(self.property_number)
+    
     def save(self, *args, **kwargs):
         super().save()
 
@@ -72,3 +78,23 @@ class Vehicle(models.Model):
             output_size = (300, 300)
             img.thumbnail(output_size)
             img.save(self.image.path)
+
+    def get_mileage(self):
+        mileage_dict = {}
+        for prop_num in self.objects.all():
+            find_record = DailyCheck.objects.filter(unit_property_number=prop_num).aggregate(Max('mileage'))
+            if find_record['mileage__max'] != None:
+                mileage_dict.update({prop_num.property_number:find_record['mileage__max']})
+            else:
+                continue
+        return mileage_dict
+
+    def get_location(self):
+        location_dict = {}
+        for prop_num in self.objects.all():
+            find_record = DailyCheck.objects.filter(unit_property_number=prop_num).aggregate(Max('mileage'))
+            if find_record['mileage__max'] != None:
+                location_dict.update({prop_num.property_number:find_record['mileage__max']})
+            else:
+                continue
+        return location_dict

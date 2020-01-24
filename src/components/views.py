@@ -29,6 +29,10 @@ class UnitListView(LoginRequiredMixin, ListView):
     model = Vehicle
     ordering = ['unit_number']
 
+    def get_context_data(self, **kwargs):
+        kwargs['mileage_list'] = Vehicle.get_mileage(Vehicle)
+        return super(UnitListView, self).get_context_data(**kwargs)
+
 class UnitDetailView(LoginRequiredMixin, DetailView):
     model = Vehicle
 
@@ -39,14 +43,15 @@ class UnitUpdateView(LoginRequiredMixin,UpdateView):
     # This next line redirects the page to the blog home page.
     success_url = '/manage/medic_unit'
 
-class MedicAddView(LoginRequiredMixin, CreateView):
+class MedicCreateView(LoginRequiredMixin, CreateView):
     model = MedicUnit
     fields = ['unit_name', 'is_active']
     template_name_suffix = '_add'
+    success_url = '/manage/medic_unit'
 
 class MedicListView(LoginRequiredMixin, ListView):
     model = MedicUnit
-    ordering = ['unit_number']
+    ordering = ['unit_name']
 
 class MedicDetailView(LoginRequiredMixin, DetailView):
     model = MedicUnit

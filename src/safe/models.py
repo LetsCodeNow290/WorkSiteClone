@@ -20,7 +20,7 @@ class Safe(models.Model):
    
     class Meta:
         permissions = (
-            ('can_view', "Fuck You"),
+            ('can_view', "View This"),
             ('can_add', 'Add to the Safe')
             )
         

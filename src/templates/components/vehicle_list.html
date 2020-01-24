@@ -7,11 +7,19 @@
         <article class="media content-section">
             <img class="rounded-circle article-img" src="{{ unit.image.url }}">
             <div class="media-body">
-                <h2><a class="article-title" href="{% url 'medic_unit_detail' unit.id %}">{{ unit }}</a></h2>
+                <h2><a class="article-title" href="#">{{ unit }}</a></h2>
                 <div class="article-metadata">
-                <p class="article-content">Property Number: {{ unit.property_number }}</p>
+                <p class="article-content">Unit Number: {{ unit.unit_number }}</p>
                 <p class="article-content">{{ unit.year }} {{ unit.make }} {{ unit.model }}</p>
+                {% if unit.property_number in mileage_list.keys %}
+                    {% for prop_num, mileage in mileage_list.items %}
+                    {% if unit.property_number == prop_num %}
+                    <p class="article-content">Mileage: {{ mileage }}</p>
+                    {% endif %}
+                    {% endfor %}
+                {% else %}
                 <p class="article-content">Mileage: {{ unit.mileage }}</p>
+                {% endif %}
             </div>
             </article>
 
