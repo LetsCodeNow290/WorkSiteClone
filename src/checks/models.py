@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.timezone import now
+from datetime import datetime
 
 # Create your models here.
 
@@ -24,19 +26,21 @@ class DailyCheck(models.Model):
 class RSIBag(models.Model):
     user = models.ForeignKey(User, on_delete=models.PROTECT)
     record_date = models.DateTimeField(auto_now=True)
-    seal_number = models.IntegerField()
+    RSI_seal_number = models.IntegerField()
     incident_number = models.CharField(max_length=20)
     hospital = models.CharField(max_length=50)
-    contact_EMS_Chief = models.CharField(max_length=100, default='')
+    contact_EMS_Chief = models.DateTimeField(default=datetime.now)
     free_text = models.TextField(default='')
 
 class NarcBox(models.Model):
+    narc_medic_unit_number = models.ForeignKey('components.MedicUnit', related_name='narc_medic_unit_number', on_delete=models.PROTECT, default='')
     user = models.ForeignKey(User, on_delete=models.PROTECT)
     record_date = models.DateTimeField(auto_now=True)
     seal_number = models.IntegerField()
-    narc_name = models.ForeignKey('components.Drug', related_name='narc_name', on_delete=models.PROTECT, default=0, limit_choices_to={'is_active_unit': True})
-    amount_removed_unit = models.IntegerField(blank=True, null=True, default=0)
-    amount_added_unit = models.IntegerField(blank=True, null=True, default=0)
+    narcotic_name = models.ForeignKey('components.Drug', related_name='narc_name', on_delete=models.PROTECT, default=0, limit_choices_to={'is_active_unit': True})
+    amount_given_to_patient = models.IntegerField(blank=True, null=True, default=0)
+    amount_removed_from_unit = models.IntegerField(blank=True, null=True, default=0)
+    amount_added_to_unit = models.IntegerField(blank=True, null=True, default=0)
     amount_in_unit = models.IntegerField(blank=True, null=True, default=0)
     incident_number = models.CharField(max_length=20)
     hospital = models.CharField(max_length=50)

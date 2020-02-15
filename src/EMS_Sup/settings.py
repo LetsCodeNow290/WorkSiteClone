@@ -143,3 +143,9 @@ LOGIN_REDIRECT_URL = 'home'
 
 #This line redirects all unauthenticated page requests to the login page
 LOGIN_URL = 'login'
+
+#This line creates exceptions for the middleware.py
+#Middleware.py redirects all unauthenticated traffic to the login page
+LOGIN_EXEMPT_URLS = (
+    'logout'
+)

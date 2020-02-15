@@ -12,8 +12,3 @@ def create_profile(sender, instance, created, **kwagrs):
 @receiver(post_save, sender=User)
 def save_profile(sender, instance, **kwagrs):
     instance.userprofile.save()
-
-@receiver(post_save, sender=User)
-def create_profile(sender, instance, created, **kwagrs):
-    if created:
-        MedicUnit.objects.create(unit_name=instance)

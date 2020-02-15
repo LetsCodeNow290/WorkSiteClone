@@ -20,8 +20,8 @@ from django.conf.urls.static import static
 from django.contrib.auth.views import LoginView, LogoutView
 from blog.views import blog_view, PostListView, PostDetailView, PostCreateView, PostUpdateView, PostDeleteView, UserPostListView
 from home.views import home_view
-from checks.views import checkAdd
-from checks.views import check_home_view, daily_view, weekly_view
+from checks.views import checkAdd, NarcCheckAdd
+from checks.views import check_home_view, narc_seal_view
 from safe.views import safe_home_view, AddDrug, SubDrug, CheckDrug, search_drug
 from components.views import component_home_view, add_drug, add_vehicle, profile, register, UnitUpdateView, UnitListView, UnitDetailView, DrugListView, DrugUpdateView, MedicCreateView, MedicListView
 
@@ -29,7 +29,7 @@ from components.views import component_home_view, add_drug, add_vehicle, profile
 
 urlpatterns = [
     path('blog/', PostListView.as_view(), name='blog'),
-    path('user/<str:username>', UserPostListView.as_view(), name='user_posts'),
+    path('user/<str:username>/', UserPostListView.as_view(), name='user_posts'),
     path('blog/new/', PostCreateView.as_view(), name='blog_create'),
     path('blog/<int:pk>/update/', PostUpdateView.as_view(), name='blog_update'),
     path('blog/<int:pk>/delete/', PostDeleteView.as_view(), name='blog_delete'),
@@ -39,7 +39,9 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(template_name='components/logout.html'), name='logout'),
     path('checks/', check_home_view, name='check_home_view'),
     path('checks/daily/', checkAdd.as_view(), name='daily'),
-    path('checks/weekly/', weekly_view, name='weekly'),
+    path('checks/narc_seal/', narc_seal_view, name='narc_seal'),
+    path('checks/narc_daily/', NarcCheckAdd.as_view(), name='narc_daily'),
+    #path('checks/weekly/', weekly_view, name='weekly'),
     path('safe/', safe_home_view, name='safe_home_view'),
     path('safe/check/', CheckDrug.as_view(), name='safe_check_view'),
     path('safe/add/', AddDrug.as_view(), name='safe_add_view'),
@@ -50,12 +52,12 @@ urlpatterns = [
     path('manage/medic_unit/', MedicListView.as_view(), name='medic_unit'),
     path('manage/vehicle/', UnitListView.as_view(), name='vehicle'),
     path('manage/vehicle/<int:pk>/', UnitDetailView.as_view(), name='vehicle_detail'),
-    path('manage/vehicle/add', add_vehicle, name='vehicle_add'),
+    path('manage/vehicle/add/', add_vehicle, name='vehicle_add'),
     path('manage/vehicle/<int:pk>/update/', UnitUpdateView.as_view(), name='vehicle_update'),
     path('manage/drugs/<int:pk>/update/', DrugUpdateView.as_view(), name='drug_update'),
-    path('manage/drugs/add', add_drug, name='add_drug'),
+    path('manage/drugs/add/', add_drug, name='add_drug'),
     path('manage/drugs/', DrugListView.as_view(), name='drugs'),
-    path('profile', profile, name='profile'),
+    path('profile/', profile, name='profile'),
     path('manage/register/', register, name='register'),
     path('admin/', admin.site.urls, name='admin'),
 ]

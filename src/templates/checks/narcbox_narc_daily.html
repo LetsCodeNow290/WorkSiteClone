@@ -1,12 +1,12 @@
 {% extends 'checks/check_base.html' %}
 {% load crispy_forms_tags %}
-
 {% block content %}
+
 <div class='content-section'>
     <form method="POST"> 
         {% csrf_token %}
         <fieldset class='form-group'>
-            <legend class="border-bottom mb-4">Sign Up Here</legend>
+            <legend class="border-bottom mb-4">Narcotic Daily Check</legend>
             {{ form|crispy }}
         </fieldset>
         <div class="form-group">
@@ -14,4 +14,5 @@
         </div>
     </form>
 </div>
+
 {% endblock %}

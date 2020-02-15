@@ -4,7 +4,7 @@ from django.urls import reverse
 
 
 class Post(models.Model):
-    TITLE_CHOICES = (('901', '901'), ('902', '902'))
+    TITLE_CHOICES = (('EMS 901', 'EMS 901'), ('EMS 902', 'EMS 902'))
     title = models.CharField(max_length=100, choices=TITLE_CHOICES)
     content = models.TextField()
     date_posted = models.DateTimeField(auto_now=True)

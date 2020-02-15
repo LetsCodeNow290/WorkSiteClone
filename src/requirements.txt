@@ -1,0 +1,10 @@
+Django==2.2.7
+django-computed-property==0.3.0
+django-crispy-forms==1.8.0
+django-extra-views==0.12.0
+django-filter==2.2.0
+Pillow==6.2.1
+pkg-resources==0.0.0
+pytz==2019.3
+six==1.13.0
+sqlparse==0.3.0

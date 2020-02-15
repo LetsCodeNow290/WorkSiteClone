@@ -82,9 +82,9 @@ class Vehicle(models.Model):
     def get_mileage(self):
         mileage_dict = {}
         for prop_num in self.objects.all():
-            find_record = DailyCheck.objects.filter(unit_property_number=prop_num).aggregate(Max('mileage'))
-            if find_record['mileage__max'] != None:
-                mileage_dict.update({prop_num.property_number:find_record['mileage__max']})
+            find_record = DailyCheck.objects.filter(unit_property_number=prop_num).latest('record_date')
+            if find_record != None:
+                mileage_dict.update({prop_num.property_number:find_record.mileage})
             else:
                 continue
         return mileage_dict
