@@ -44,6 +44,7 @@ urlpatterns = [
     #path('checks/weekly/', weekly_view, name='weekly'),
     path('safe/', safe_home_view, name='safe_home_view'),
     #path('safe/check/', CheckDrug.as_view(), name='safe_check_view'),
+    #path('safe/check/', SafeCheck.as_view(), name='safe_check_view'),
     path('safe/check/', check_safe_view, name='safe_check_view'),
     path('safe/add/', AddDrug.as_view(), name='safe_add_view'),
     path('safe/remove/', SubDrug.as_view(), name='safe_remove_view'),

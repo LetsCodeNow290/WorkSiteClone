@@ -30,5 +30,5 @@ class VehicleAddForm(forms.ModelForm):
 class DrugAddForm(forms.ModelForm):
     class Meta:
         model = Drug
-        fields = ['name']
+        fields = ['name', 'is_active_safe', 'is_active_unit']
 

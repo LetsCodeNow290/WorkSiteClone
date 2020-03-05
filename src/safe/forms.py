@@ -12,8 +12,10 @@ class DrugSearch(django_filters.FilterSet):
        model = Safe
        fields = ['drug_name', 'start_date', 'exact_date']
 
-# class DrugNameModelField(ModelChoiceField):
-#     def label_from_instance(self, obj):
-#         return f'{obj.drug_name}'
+class SafeCheckForm(forms.ModelForm):
+    class Meta:
+        model = Safe
+        fields = ['amount_in_safe', 'free_text']
 
-SafeCheckFormSet = modelformset_factory(Safe, fields=('drug_name','amount_in_safe',), extra = 0)
+SafeCheckFormSet = modelformset_factory(Safe, form=SafeCheckForm, fields=('amount_in_safe', 'free_text',), extra = len(Drug.objects.filter(is_active_safe=True)))
+

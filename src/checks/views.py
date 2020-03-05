@@ -17,7 +17,7 @@ def check_home_view(request):
         if form.is_valid():
             unit_name = form.cleaned_data.get('medic_unit_number')
             request.session['unit_name'] = model_to_dict(unit_name)
-            print(request.session['unit_name']['id'])
+            print(request.session['unit_name']['unit_name'])
             return redirect('daily')
     else:
         form = ChooseMedicUnit()
@@ -32,6 +32,10 @@ class checkAdd(CreateView):
         form.instance.daily_user = self.request.user
         form.instance.medic_unit_number = MedicUnit.objects.get(pk=self.request.session['unit_name']['id'])
         return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        kwargs['medic_unit'] = self.request.session['unit_name']['unit_name']
+        return super().get_context_data(**kwargs)
 
 def narc_seal_view(request):
     if request.method == 'POST':

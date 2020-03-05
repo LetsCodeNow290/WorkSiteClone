@@ -10,13 +10,9 @@ from django.db.models import Sum, Q
 from django.template import RequestContext
 from django.forms import modelformset_factory
 from django.db import transaction
-from .forms import DrugSearch, SafeCheckFormSet
+from .forms import DrugSearch, SafeCheckFormSet, SafeCheckForm
 import django_filters
 from extra_views import ModelFormSetView
-
-
-
-
 # Create your views here.
 
 
@@ -69,7 +65,6 @@ class SubDrug(LoginRequiredMixin,CreateView):
 
 class CheckDrug(LoginRequiredMixin,CreateView):
     model = Safe
-    form = SafeCheckFormSet(queryset=Drug.objects.filter(is_active_safe=True))
     template_name_suffix = '_check'
     fields = ['drug_name', 'amount_in_safe', 'free_text']
     required = ['amount_in_safe']
@@ -90,31 +85,56 @@ class CheckDrug(LoginRequiredMixin,CreateView):
         return form
 
 
+# class SafeCheck(ModelFormSetView):
+#     model = Safe
+#     template_name = 'safe/safe_check_formset_view.html'
+#     fields = ['drug_name', 'amount_in_safe']
+#     success_url = '/safe/check'
+#     factory_kwargs = {'extra' : len(Drug.objects.filter(is_active_safe=True))}
+    
+
+#     def formset_valid(self, formset):
+#         print(dir(formset))
+#         formset.instance.user = self.request.user
+#         return super().formset_valid(formset)
+
+#     def get_queryset(self):
+#         return super().get_queryset().none()
+    
+#     def get_initial(self):
+#         return super().get_initial()
+
+
 def check_safe_view(request):
     template_name = 'safe/safe_check_formset.html'
     if request.method == 'POST':
         formset = SafeCheckFormSet(request.POST)
+        drugset = Drug.objects.filter(is_active_safe=True)
         if formset.is_valid():
+            count = 0
+            # This next for loop adds the user and the drug name automaticlly 
             for form in formset:
-                if form.cleaned_data.get('amount_in_safe'):
-                    form.save()
+                instance = form.save(commit=False)
+                instance.user = request.user
+                instance.drug_name = drugset[count]
+                instance.save()
+                count+=1
+            formset.save()
         return redirect('safe_home_view')
     else:
-        # count = 0
-        # queryset = {}
-        # for drug in Drug.objects.filter(is_active_safe=True):
-        #     print(drug)
-        #     queryset.update({drug.key(): drug})
-        #     count+=1
-        # print(queryset)
-        formset = SafeCheckFormSet(queryset=Drug.objects.filter(is_active_safe=True))
-        # formset = SafeCheckFormSet(queryset=Drug.objects.filter(is_active_safe=True))
-        # count = 0
-        # for form in formset:
-        #     form.fields['drug_name'] = form.fields['drug_name'].queryset[count]
-            
-        #     count+=1
-    return render(request, template_name, {'formset':formset})
+        #These next datasets will send the correct drug name and form to the template
+        formset = SafeCheckFormSet(queryset=Safe.objects.none())
+        drugs = Drug.objects.filter(is_active_safe=True)
+        object_list = Safe.calc_total(Safe)
+        drugset = {}
+        for drug in drugs:
+            for total in object_list:
+                if drug == total:
+                    drugset.update({f'{drug}: {object_list[drug]}mg': drug})
+        date_list = Safe.get_check_date(Safe)
+        context = {'formset': formset, 'drugset' : drugset, 'object_list' : object_list, 'date_list': date_list}
+       
+    return render(request, template_name, context)
 
 @login_required
 def search_drug(request):

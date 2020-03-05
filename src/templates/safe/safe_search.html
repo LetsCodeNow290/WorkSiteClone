@@ -11,10 +11,10 @@
     {% for obj in filter.qs %}
     <article class="media content-section" style="background-color: antiquewhite">
     <div class="media-body">
-        <p>{{ obj.user|title }} | {{ obj.date_created}} | Drug: {{ obj.drug_name }} | Amount in the Safe: {% if obj.amount_in_safe == None %} {{ obj.amount_in_safe }}
-        {% else %} {{ obj.amount_in_safe }} mg {% endif %}| Removed: {% if obj.amount_removed == None %} {{ obj.amount_removed }}
-        {% else %} {{ obj.amount_removed }} mg {% endif %} | Added: {% if obj.amount_added == None %} {{ obj.amount_added }}
-        {% else %} {{ obj.amount_added }} mg {% endif %} | Incident Number: {{ obj.incident_number }} | Patient Name: {{ obj.patient_name }} | Unit: {{ obj.medic_unit }} | Free Text: {{ obj.free_text }}</p>
+        <p>{{ obj.user|title }} | {{ obj.date_created}} | {{ obj.id }} <br> Drug: {{ obj.drug_name }} <br> Amount in the Safe: {% if obj.amount_in_safe == None %} {{ obj.amount_in_safe }}
+        {% else %} {{ obj.amount_in_safe }} mg {% endif %} <br> Removed: {% if obj.amount_removed == None %} {{ obj.amount_removed }}
+        {% else %} {{ obj.amount_removed }} mg {% endif %} <br> Added: {% if obj.amount_added == None %} {{ obj.amount_added }}
+        {% else %} {{ obj.amount_added }} mg {% endif %} <br> Incident Number: {{ obj.incident_number }} <br> Patient Name: {{ obj.patient_name }} <br> Unit: {{ obj.medic_unit }} <br> Free Text: {{ obj.free_text }}</p>
     </div>
     </article>
     {% endfor %} 

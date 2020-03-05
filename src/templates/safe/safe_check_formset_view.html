@@ -8,9 +8,7 @@
         {{ formset.management_form }}
         <fieldset class='form-group'>
             <legend class="border-bottom mb-4"></legend>
-            {% for form in formset %}
-            {{ form|crispy }}
-            {% endfor %}
+            {{ formset }}
         </fieldset>
         <div class="form-group">
             <button class='btn btn-outline-info' type='submit'>Submit</button>
