@@ -6,6 +6,7 @@
     <form method="POST"> 
         {% csrf_token %}
         <fieldset class='form-group'>
+        <a href="{% url 'narc_daily' %}">Skip to narc box check here</a>
             <legend class="border-bottom mb-4">Daily Check for {{medic_unit}}</legend>
             {{ form|crispy }}
         </fieldset>

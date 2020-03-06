@@ -5,10 +5,11 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import DailyCheck, NarcBox
-from .forms import ChooseMedicUnit, NarcSealForm
+from .forms import ChooseMedicUnit, NarcSealForm, NarcCheckFormSet
 from django.forms.models import model_to_dict
 from django.http import JsonResponse
-from components.models import MedicUnit
+from components.models import MedicUnit, Drug
+
 
 # Create your views here.
 def check_home_view(request):
@@ -26,7 +27,7 @@ def check_home_view(request):
 class checkAdd(CreateView):
     model = DailyCheck
     fields = ['unit_property_number', 'mileage', 'emergency_lights', 'driving_lights', 'red_bag', 'LP_15', 'BLS_bag', 'RTF_bag', 'suction', 'oxygen', 'free_text']
-    success_url = '/checks/narc_seal/'
+    success_url = '/checks/narc_daily/'
 
     def form_valid(self, form):
         form.instance.daily_user = self.request.user
@@ -37,33 +38,34 @@ class checkAdd(CreateView):
         kwargs['medic_unit'] = self.request.session['unit_name']['unit_name']
         return super().get_context_data(**kwargs)
 
-def narc_seal_view(request):
+#This is the new narc check form
+def narc_check_view(request):
     if request.method == 'POST':
-        form = NarcSealForm(request.POST or None)
-        if form.is_valid():
-            seal_number = form.cleaned_data.get('seal_number')
+        seal_form = NarcSealForm(request.POST or None)
+        formset = NarcCheckFormSet(request.POST or None)
+        drugset = Drug.objects.filter(is_active_unit=True)
+        if formset.is_valid() and seal_form.is_valid():
+            seal_number = seal_form.cleaned_data.get('seal_number')
             request.session['seal_number'] = seal_number
-            print(request.session['seal_number'])
-            return redirect('narc_daily')
+            count=0
+            for form in formset:
+                instance = form.save(commit=False)
+                instance.user = request.user
+                instance.narc_medic_unit_number = MedicUnit.objects.get(pk=request.session['unit_name']['id'])
+                instance.seal_number = request.session['seal_number']
+                instance.narcotic_name = drugset[count]
+                instance.save()
+                count+=1
+            formset.save()
+
+        return redirect('check_home_view')
     else:
-        form = NarcSealForm()
-    return render(request, 'checks/narc_seal.html', {'form':form})
-
-class NarcCheckAdd(CreateView):
-    model = NarcBox
-    fields = ['seal_number', 'narcotic_name', 'amount_in_unit', 'narc_box_free_text']    
-    template_name_suffix = '_narc_daily'
-    success_url = '/checks/narc_daily'
-
-    # def get_initial(self):
-    #     initial = super().get_initial()
-    #     initial['seal_number'] = self.request.session(['seal_number'])
-    #     return initial
-
-    def form_valid(self, form):
-        form.instance.user = self.request.user
-        form.instance.narc_medic_unit_number = MedicUnit.objects.get(pk=self.request.session['unit_name']['id'])
-        return super().form_valid(form)
+        seal_form = NarcSealForm(request.POST or None)
+        # Notice below the "queryset" is equal to none. This is done so the only fields that render are the "extra" fields from the formset. Otherwise all of the old form records will populate.
+        formset = NarcCheckFormSet(queryset=NarcBox.objects.none())
+        drugset = Drug.objects.filter(is_active_unit=True)
+        display_unit = request.session['unit_name']['unit_name']
+    return render(request, 'checks/narc_check.html', {'formset':formset, 'drugset':drugset, 'seal_form':seal_form, 'display_unit':display_unit})
 
 def daily_view(request):
     return render(request, 'checks/daily_check.html')

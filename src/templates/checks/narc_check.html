@@ -1,0 +1,25 @@
+{% extends 'checks/check_base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<div class='content-section'>
+    <form method="POST"> 
+        {% csrf_token %}
+        <h1>Daily Narc Check for {{ display_unit }}</h1>
+        {{ formset.management_form }}
+        <fieldset class='form-group'>
+            <legend class="border-bottom mb-4">Enter your seal number</legend>
+            {{ seal_form|crispy }}
+            {% for form in formset %}{% for drug in drugset %}
+            {% if forloop.counter == forloop.parentloop.counter %}
+            <div><h3>{{ drug }}</h3> {{form|crispy}}</div>
+            {% endif %}
+{% endfor %}{% endfor %}
+        </fieldset>
+        <div class="form-group">
+            <button class='btn btn-outline-info' type='submit'>Submit</button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}
