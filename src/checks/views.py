@@ -4,8 +4,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .models import DailyCheck, NarcBox
-from .forms import ChooseMedicUnit, NarcSealForm, NarcCheckFormSet
+from .models import DailyCheck, NarcBox,RSIBag
+from .forms import ChooseMedicUnit, NarcSealForm, NarcCheckFormSet, RSICheckForm
 from django.forms.models import model_to_dict
 from django.http import JsonResponse
 from components.models import MedicUnit, Drug
@@ -41,9 +41,16 @@ class checkAdd(CreateView):
 #This is the new narc check form
 def narc_check_view(request):
     if request.method == 'POST':
+        if request.session['unit_name']['is_supervisor'] == True:
+            RSI_check = RSICheckForm(request.POST or None)
+            if RSI_check.is_valid():
+                instance = RSI_check.save(commit=False)
+                instance.user = request.user  
+                instance.save()
         seal_form = NarcSealForm(request.POST or None)
         formset = NarcCheckFormSet(request.POST or None)
         drugset = Drug.objects.filter(is_active_unit=True)
+          
         if formset.is_valid() and seal_form.is_valid():
             seal_number = seal_form.cleaned_data.get('seal_number')
             request.session['seal_number'] = seal_number
@@ -60,12 +67,18 @@ def narc_check_view(request):
 
         return redirect('check_home_view')
     else:
+        display_unit = request.session['unit_name']['unit_name']
+        context = {}
+        if request.session['unit_name']['is_supervisor'] == True:
+            RSI_check = RSICheckForm(request.POST or None)
+            context.update({'RSI_check': RSI_check})
         seal_form = NarcSealForm(request.POST or None)
         # Notice below the "queryset" is equal to none. This is done so the only fields that render are the "extra" fields from the formset. Otherwise all of the old form records will populate.
         formset = NarcCheckFormSet(queryset=NarcBox.objects.none())
         drugset = Drug.objects.filter(is_active_unit=True)
-        display_unit = request.session['unit_name']['unit_name']
-    return render(request, 'checks/narc_check.html', {'formset':formset, 'drugset':drugset, 'seal_form':seal_form, 'display_unit':display_unit})
+        context.update({'formset':formset, 'drugset':drugset, 'seal_form':seal_form, 'display_unit':display_unit})
+        
+    return render(request, 'checks/narc_check.html', context)
 
 def daily_view(request):
     return render(request, 'checks/daily_check.html')

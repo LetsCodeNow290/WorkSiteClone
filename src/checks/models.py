@@ -27,9 +27,10 @@ class RSIBag(models.Model):
     user = models.ForeignKey(User, on_delete=models.PROTECT)
     record_date = models.DateTimeField(auto_now=True)
     RSI_seal_number = models.IntegerField()
-    incident_number = models.CharField(max_length=20)
-    hospital = models.CharField(max_length=50)
-    contact_EMS_Chief = models.DateTimeField(default=datetime.now)
+    next_expiration_date = models.DateField(default=datetime.now)
+    incident_number = models.CharField(max_length=20, blank=True, null=True)
+    hospital = models.CharField(max_length=50, blank=True, null=True)
+    contact_EMS_Chief = models.DateTimeField(default=datetime.now, blank=True, null=True)
     free_text = models.TextField(default='')
 
 class NarcBox(models.Model):

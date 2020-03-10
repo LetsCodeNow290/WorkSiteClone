@@ -22,7 +22,7 @@ from blog.views import blog_view, PostListView, PostDetailView, PostCreateView, 
 from home.views import home_view
 from checks.views import checkAdd, narc_check_view, check_home_view
 from safe.views import check_safe_view, safe_home_view, AddDrug, SubDrug, CheckDrug, search_drug
-from components.views import component_home_view, add_drug, add_vehicle, profile, register, UnitUpdateView, UnitListView, UnitDetailView, DrugListView, DrugUpdateView, MedicCreateView, MedicListView
+from components.views import component_home_view, add_drug, add_vehicle, profile, register, UnitUpdateView, UnitListView, UnitDetailView, DrugListView, DrugUpdateView, MedicCreateView, MedicListView, MedicUpdateView
 
 
 
@@ -47,6 +47,7 @@ urlpatterns = [
     path('safe/search/', search_drug, name='safe_search_view'),
     path('manage/', component_home_view, name='component_home_view'),
     path('manage/medic_unit/create/', MedicCreateView.as_view(), name='medic_unit_add'),
+    path('manage/medic_unit/<int:pk>/update/', MedicUpdateView.as_view(), name='medicunit_update'),
     path('manage/medic_unit/', MedicListView.as_view(), name='medic_unit'),
     path('manage/vehicle/', UnitListView.as_view(), name='vehicle'),
     path('manage/vehicle/<int:pk>/', UnitDetailView.as_view(), name='vehicle_detail'),

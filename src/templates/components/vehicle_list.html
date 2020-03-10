@@ -7,7 +7,7 @@
         <article class="media content-section">
             <img class="rounded-circle article-img" src="{{ unit.image.url }}">
             <div class="media-body">
-                <h2><a class="article-title" href="#">{{ unit }}</a></h2>
+                <h2>{{ unit }}</h2>
                 <div class="article-metadata">
                 <p class="article-content">Unit Number: {{ unit.unit_number }}</p>
                 <p class="article-content">{{ unit.year }} {{ unit.make }} {{ unit.model }}</p>
@@ -20,6 +20,9 @@
                 {% else %}
                 <p class="article-content">Mileage: {{ unit.mileage }}</p>
                 {% endif %}
+            </div>
+            <div>
+                <a class="btn btn-secondary btm-sm mt-1 mb-1" href="{% url 'vehicle_update' unit.id %}">Update</a>
             </div>
             </article>
 

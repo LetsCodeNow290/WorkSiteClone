@@ -6,10 +6,13 @@
      {% for unit in object_list %}
         <article class="media content-section">
             <div class="media-body">
-                <h2><a class="article-title" href="#">{{ unit_name }}</a></h2>
+                <h2>{{ unit.unit_name }}</h2>
                 <div class="article-metadata">
-                <p style="font-size: large;" class="article-content">{{ unit.unit_name }}</p>
                 <p class="article-content">Active unit: {{ unit.is_active}}</p>
+                <p class="article-content">Is a supervisor unit: {{ unit.is_supervisor}}</p>
+            </div>
+            <div>
+                <a class="btn btn-secondary btm-sm mt-1 mb-1" href="{% url 'medicunit_update' unit.id %}">Update</a>
             </div>
             </article>
 

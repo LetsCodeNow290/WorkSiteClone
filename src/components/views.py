@@ -45,7 +45,7 @@ class UnitUpdateView(LoginRequiredMixin,UpdateView):
 
 class MedicCreateView(LoginRequiredMixin, CreateView):
     model = MedicUnit
-    fields = ['unit_name', 'is_active']
+    fields = ['unit_name', 'is_active', 'is_supervisor']
     template_name_suffix = '_add'
     success_url = '/manage/medic_unit'
 
@@ -58,7 +58,7 @@ class MedicDetailView(LoginRequiredMixin, DetailView):
 
 class MedicUpdateView(LoginRequiredMixin,UpdateView):
     model = MedicUnit
-    fields = ['unit_name', 'is_active']
+    fields = ['unit_name', 'is_active', 'is_supervisor']
     # This next line redirects the page to the blog home page.
     success_url = '/manage/medic_unit'
 
