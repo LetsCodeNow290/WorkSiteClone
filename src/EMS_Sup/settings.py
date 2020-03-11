@@ -147,5 +147,23 @@ LOGIN_URL = 'login'
 #This line creates exceptions for the middleware.py
 #Middleware.py redirects all unauthenticated traffic to the login page
 LOGIN_EXEMPT_URLS = (
-    'logout'
+    'logout',
+    'password_reset',
+    'password_done',
+    'password_confirm'
 )
+
+# SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
+
+# EMAIL_HOST = 'smtp.sendgrid.net'
+# EMAIL_HOST_USER = 'apikey'
+# EMAIL_HOST_PASSWORD = SENDGRID_API_KEY
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'jesse.mckittrick@gmail.com' #os.environ.get('EMAIL_USER')
+EMAIL_HOST_PASSWORD = 'tylxeqoxrbpgozre' #os.environ.get('EMAIL_PASSWORD')

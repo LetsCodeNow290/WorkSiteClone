@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.views import LoginView, LogoutView, PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView
 from blog.views import blog_view, PostListView, PostDetailView, PostCreateView, PostUpdateView, PostDeleteView, UserPostListView
 from home.views import home_view
 from checks.views import checkAdd, narc_check_view, check_home_view
@@ -33,9 +33,6 @@ urlpatterns = [
     path('blog/<int:pk>/update/', PostUpdateView.as_view(), name='blog_update'),
     path('blog/<int:pk>/delete/', PostDeleteView.as_view(), name='blog_delete'),
     path('blog/<int:pk>/', PostDetailView.as_view(), name='blog_detail'),
-    path('', home_view, name='home'),
-    path('login/', LoginView.as_view(template_name='components/login.html'), name='login'),
-    path('logout/', LogoutView.as_view(template_name='components/logout.html'), name='logout'),
     path('checks/', check_home_view, name='check_home_view'),
     path('checks/daily/', checkAdd.as_view(), name='daily'),
     path('checks/narc_daily/', narc_check_view, name='narc_daily'),
@@ -59,6 +56,12 @@ urlpatterns = [
     path('profile/', profile, name='profile'),
     path('manage/register/', register, name='register'),
     path('admin/', admin.site.urls, name='admin'),
+    path('', home_view, name='home'),
+    path('login/', LoginView.as_view(template_name='components/login.html'), name='login'),
+    path('logout/', LogoutView.as_view(template_name='components/logout.html'), name='logout'),
+    path('password-reset/', PasswordResetView.as_view(template_name='components/password_reset.html'), name='password_reset'),
+    path('password-reset/done/', PasswordResetDoneView.as_view(template_name='components/password_reset_done.html'), name='password_reset_done'),
+    path('password-reset-confirm/<uidb64>/<token>/', PasswordResetConfirmView.as_view(template_name='components/password_reset_confirm.html'), name='password_reset_confirm'),
 ]
 
 #This line ensures that media files are stored and accessed differently during development. Once production starts, debug mode will end and this line will be ignored

@@ -15,10 +15,14 @@ class DrugSearch(django_filters.FilterSet):
 class SafeCheckForm(forms.ModelForm):
     class Meta:
         model = Safe
-        fields = ['amount_in_safe', 'free_text']
+        fields = ['amount_in_safe']
         widgets = {
           'free_text': Textarea(attrs={'rows':2, 'cols':20}),
         }
 
-SafeCheckFormSet = modelformset_factory(Safe, form=SafeCheckForm, fields=('amount_in_safe', 'free_text',), extra = len(Drug.objects.filter(is_active_safe=True)))
+SafeCheckFormSet = modelformset_factory(Safe, form=SafeCheckForm, fields=('amount_in_safe',), extra = len(Drug.objects.filter(is_active_safe=True)))
 
+class SafeCheckFreeText(forms.ModelForm):
+  class Meta:
+    model = Safe
+    fields = ['free_text']

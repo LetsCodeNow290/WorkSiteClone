@@ -26,7 +26,7 @@
 <div class='content-section'>
     <form method="POST"> 
         {% csrf_token %}
-        <h1>Daily Narc Safe Check</h1>
+        <h2>Daily Narc Safe Check</h2>
         {{ formset.management_form }}
         <fieldset class='form-group'>
             <legend class="border-bottom mb-4"></legend>
@@ -35,6 +35,7 @@
             <div><h3>{{ drug }}</h3> {{form|crispy}}</div>
             {% endif %}
 {% endfor %}{% endfor %}
+        {{ text_box|crispy }}
         </fieldset>
         <div class="form-group">
             <button class='btn btn-outline-info' type='submit'>Submit</button>

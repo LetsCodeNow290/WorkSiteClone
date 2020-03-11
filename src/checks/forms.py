@@ -20,12 +20,10 @@ class NarcCheckForm(forms.ModelForm):
         self.fields['amount_in_unit'].required = True
   class Meta:
       model = NarcBox
-      fields = ['amount_in_unit', 'narc_box_free_text']
-      widgets = {
-        'narc_box_free_text': Textarea(attrs={'rows':2, 'cols':20}),
-      }
+      fields = ['amount_in_unit']
+      
 
-NarcCheckFormSet = modelformset_factory(NarcBox, form=NarcCheckForm, fields=('amount_in_unit', 'narc_box_free_text',), extra = len(Drug.objects.filter(is_active_unit=True)))
+NarcCheckFormSet = modelformset_factory(NarcBox, form=NarcCheckForm, fields=('amount_in_unit',), extra = len(Drug.objects.filter(is_active_unit=True)))
 
 class RSICheckForm(forms.ModelForm):
     class Meta:
@@ -35,3 +33,12 @@ class RSICheckForm(forms.ModelForm):
           'free_text': Textarea(attrs={'rows':2, 'cols':20}),
         }
         labels = {'free_text': 'RSI free text'}
+
+class NarcBoxFreeText(forms.ModelForm):
+  class Meta:
+    model = NarcBox
+    fields = ['narc_box_free_text']
+    # widgets = {
+    #     'narc_box_free_text': Textarea(attrs={'rows':2, 'cols':20}),
+    #   }
+    labels = {'narc_box_free_text' : 'Free Text'}

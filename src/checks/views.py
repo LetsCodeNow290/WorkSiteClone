@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import DailyCheck, NarcBox,RSIBag
-from .forms import ChooseMedicUnit, NarcSealForm, NarcCheckFormSet, RSICheckForm
+from .forms import ChooseMedicUnit, NarcSealForm, NarcCheckFormSet, RSICheckForm, NarcBoxFreeText
 from django.forms.models import model_to_dict
 from django.http import JsonResponse
 from components.models import MedicUnit, Drug
@@ -50,8 +50,9 @@ def narc_check_view(request):
         seal_form = NarcSealForm(request.POST or None)
         formset = NarcCheckFormSet(request.POST or None)
         drugset = Drug.objects.filter(is_active_unit=True)
+        textset = NarcBoxFreeText(request.POST or None)
           
-        if formset.is_valid() and seal_form.is_valid():
+        if formset.is_valid() and seal_form.is_valid() and textset.is_valid():
             seal_number = seal_form.cleaned_data.get('seal_number')
             request.session['seal_number'] = seal_number
             count=0
@@ -64,6 +65,8 @@ def narc_check_view(request):
                 instance.save()
                 count+=1
             formset.save()
+            seal_form.save()
+            textset.save()
 
         return redirect('check_home_view')
     else:
@@ -76,7 +79,8 @@ def narc_check_view(request):
         # Notice below the "queryset" is equal to none. This is done so the only fields that render are the "extra" fields from the formset. Otherwise all of the old form records will populate.
         formset = NarcCheckFormSet(queryset=NarcBox.objects.none())
         drugset = Drug.objects.filter(is_active_unit=True)
-        context.update({'formset':formset, 'drugset':drugset, 'seal_form':seal_form, 'display_unit':display_unit})
+        textset = NarcBoxFreeText()
+        context.update({'formset':formset, 'drugset':drugset, 'seal_form':seal_form, 'display_unit':display_unit, 'textset' : textset})
         
     return render(request, 'checks/narc_check.html', context)
 

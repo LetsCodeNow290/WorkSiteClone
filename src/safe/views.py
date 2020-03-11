@@ -10,7 +10,7 @@ from django.db.models import Sum, Q
 from django.template import RequestContext
 from django.forms import modelformset_factory
 from django.db import transaction
-from .forms import DrugSearch, SafeCheckFormSet, SafeCheckForm
+from .forms import DrugSearch, SafeCheckFormSet, SafeCheckForm, SafeCheckFreeText
 import django_filters
 from extra_views import ModelFormSetView
 # Create your views here.
@@ -110,7 +110,8 @@ def check_safe_view(request):
     if request.method == 'POST':
         formset = SafeCheckFormSet(request.POST)
         drugset = Drug.objects.filter(is_active_safe=True)
-        if formset.is_valid():
+        textset = SafeCheckFreeText(request.POST)
+        if formset.is_valid() and textset.is_valid():
             count = 0
             # This next for loop adds the user and the drug name automaticlly 
             for form in formset:
@@ -120,6 +121,8 @@ def check_safe_view(request):
                 instance.save()
                 count+=1
             formset.save()
+            textset.save()
+
         return redirect('safe_home_view')
     else:
         #These next datasets will send the correct drug name and form to the template
@@ -132,7 +135,8 @@ def check_safe_view(request):
                 if drug == total:
                     drugset.update({f'{drug}: {object_list[drug]}mg': drug})
         date_list = Safe.get_check_date(Safe)
-        context = {'formset': formset, 'drugset' : drugset, 'object_list' : object_list, 'date_list': date_list}
+        text_box = SafeCheckFreeText()
+        context = {'formset': formset, 'drugset' : drugset, 'object_list' : object_list, 'date_list': date_list, 'text_box' : text_box}
        
     return render(request, template_name, context)
 
