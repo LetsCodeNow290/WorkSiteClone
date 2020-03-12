@@ -1,0 +1,10 @@
+{% extends 'checks/check_base.html' %}
+{% block content %}
+<fieldset class='content-section'>
+    <h2>Medic Unit Home Page</h2>
+    <a href="{% url 'daily' %}">Daily</a><br>
+    <a href="{% url 'weekly' %}">Weekly</a><br>
+    <a href="{% url 'narc_daily' %}">Check narc box</a>
+    <h2>{{ daily_info.free_text }}</h2>
+</fieldset>
+{% endblock %}

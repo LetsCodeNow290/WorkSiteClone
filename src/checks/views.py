@@ -4,11 +4,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .models import DailyCheck, NarcBox,RSIBag
+from .models import DailyCheck, NarcBox,RSIBag, WeeklyCheck
 from .forms import ChooseMedicUnit, NarcSealForm, NarcCheckFormSet, RSICheckForm, NarcBoxFreeText
 from django.forms.models import model_to_dict
 from django.http import JsonResponse
 from components.models import MedicUnit, Drug
+from django.db.models import Sum, Max
 
 
 # Create your views here.
@@ -19,7 +20,7 @@ def check_home_view(request):
             unit_name = form.cleaned_data.get('medic_unit_number')
             request.session['unit_name'] = model_to_dict(unit_name)
             print(request.session['unit_name']['unit_name'])
-            return redirect('daily')
+            return redirect('post_unit_view')
     else:
         form = ChooseMedicUnit()
     return render(request, 'checks/checks_home.html', {'form':form})
@@ -88,10 +89,34 @@ def narc_check_view(request):
         
     return render(request, 'checks/narc_check.html', context)
 
-def daily_view(request):
-    return render(request, 'checks/daily_check.html')
+def post_unit_view(request):
+    daily_info = DailyCheck.objects.latest('free_text')
+    return render(request, 'checks/post_unit_view.html',{'daily_info':daily_info})
 
-def weekly_view(request):
-    return render(request, 'checks/weekly_check.html')
+class WeeklyCheckView(CreateView):
+    model = WeeklyCheck
+    fields = [
+        'engine_oil',
+        'transmission_fluid',
+        'brake_fluid',
+        'coolant',
+        'LUCAS_device',
+        'EMS_equipment',
+        'suciton_unit',
+        'driver_front_tire',
+        'driver_rear_tire',
+        'passenger_front_tire',
+        'passenger_rear_tire',
+        'comments'
+    ]
+    success_url = '/checks/'
+    template_name = 'checks/weekly_check_view.html'
+    
+    def form_valid(self, form):
+        form.instance.weekly_user = self.request.user
+        form.instance.weekly_unit_number = MedicUnit.objects.get(pk=self.request.session['unit_name']['id'])
+        return super().form_valid(form)
 
-#class WeeklyCheckView(CreateView):
+    def get_context_data(self, **kwargs):
+        kwargs['medic_unit'] = self.request.session['unit_name']['unit_name']
+        return super().get_context_data(**kwargs)

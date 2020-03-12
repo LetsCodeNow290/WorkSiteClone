@@ -20,7 +20,7 @@ from django.conf.urls.static import static
 from django.contrib.auth.views import LoginView, LogoutView, PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView
 from blog.views import blog_view, PostListView, PostDetailView, PostCreateView, PostUpdateView, PostDeleteView, UserPostListView
 from home.views import home_view
-from checks.views import checkAdd, narc_check_view, check_home_view
+from checks.views import checkAdd, narc_check_view, check_home_view, WeeklyCheckView, post_unit_view
 from safe.views import check_safe_view, safe_home_view, AddDrug, SubDrug, CheckDrug, search_drug
 from components.views import component_home_view, add_drug, add_vehicle, profile, register, UnitUpdateView, UnitListView, UnitDetailView, DrugListView, DrugUpdateView, MedicCreateView, MedicListView, MedicUpdateView
 
@@ -34,7 +34,9 @@ urlpatterns = [
     path('blog/<int:pk>/delete/', PostDeleteView.as_view(), name='blog_delete'),
     path('blog/<int:pk>/', PostDetailView.as_view(), name='blog_detail'),
     path('checks/', check_home_view, name='check_home_view'),
+    path('checks/home/', post_unit_view, name='post_unit_view'),
     path('checks/daily/', checkAdd.as_view(), name='daily'),
+    path('checks/weekly/', WeeklyCheckView.as_view(), name='weekly'),
     path('checks/narc_daily/', narc_check_view, name='narc_daily'),
     #path('checks/weekly/', weekly_view, name='weekly'),
     path('safe/', safe_home_view, name='safe_home_view'),

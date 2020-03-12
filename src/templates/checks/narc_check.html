@@ -14,7 +14,7 @@
             {% endif %}
             <legend class="border-bottom mb-4">Enter your Narc Box seal number</legend>
             {{ seal_form|crispy }}
-            <br></br>
+            <br>
             {% for form in formset %}{% for drug in drugset %}
             {% if forloop.counter == forloop.parentloop.counter %}
             <div><h3>{{ drug }}</h3> {{form|crispy}}</div>
