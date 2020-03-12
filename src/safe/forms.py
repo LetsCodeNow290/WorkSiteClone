@@ -23,6 +23,7 @@ class SafeCheckForm(forms.ModelForm):
 SafeCheckFormSet = modelformset_factory(Safe, form=SafeCheckForm, fields=('amount_in_safe',), extra = len(Drug.objects.filter(is_active_safe=True)))
 
 class SafeCheckFreeText(forms.ModelForm):
+
   class Meta:
     model = Safe
     fields = ['free_text']

@@ -47,5 +47,32 @@ class NarcBox(models.Model):
     hospital = models.CharField(max_length=50)
     narc_box_free_text = models.TextField(default='', blank=True)
 
+FLUID_CHOICES = (
+    ('Within Range', 'Within Range'),
+    ('Needs More', 'Needs More')
+)
+TIRE_CHOICES = (
+    ('Full','Full'),
+    ('Low', 'Low'),
+    ('Flat', 'Flat')
+)
+
+class WeeklyCheck(models.Model):
+    weekly_unit_number = models.ForeignKey('components.MedicUnit', related_name='weekly_unit_number', on_delete=models.PROTECT, default='')
+    weekly_user = models.ForeignKey(User, on_delete=models.PROTECT)
+    weekly_record_date = models.DateTimeField(auto_now=True)
+    engine_oil = models.CharField(max_length=20, choices=FLUID_CHOICES, default='Within Range')
+    transmission_fluid = models.CharField(max_length=20, choices=FLUID_CHOICES, default='Within Range')
+    brake_fluid = models.CharField(max_length=20, choices=FLUID_CHOICES, default='Within Range')
+    collant = models.CharField(max_length=20, choices=FLUID_CHOICES, default='Within Range')
+    LUCAS_device = models.CharField(max_length=30, choices=(('Functional', 'Functional'), ('Needs Repair', 'Needs Repair')), default='Functional')
+    EMS_equipment = models.CharField(max_length=40, choices=(('All equiment is present, functional and in date', 'All equiment is present, functional and in date'), ('Some euipment missing (See Comments)', 'Some euipment missing (See Comments)'), ('Items out of date (See Comments)', 'Items out of date (See Comments)')), default='All equiment is present, functional and in date')
+    suciton_unit = models.CharField(max_length=30, choices=(('Charged', 'Charged'), ('On Charge', 'On Charge'), ('Not Charging', 'Not Charging')), default='Charged')
+    driver_front_tire = models.CharField(max_length=30, choices=TIRE_CHOICES)
+    driver_rear_tire = models.CharField(max_length=30, choices=TIRE_CHOICES)
+    passenger_front_tire = models.CharField(max_length=30, choices=TIRE_CHOICES)
+    passenger_rear_tire = models.CharField(max_length=30, choices=TIRE_CHOICES)
+    comments = models.TextField(blank=True, null=True)
+
     # Need to add this to urls.py
     

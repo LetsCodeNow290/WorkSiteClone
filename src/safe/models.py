@@ -9,7 +9,7 @@ from django.db.models import Sum, Max
 class Safe(models.Model):
     user = models.ForeignKey(User, on_delete=models.PROTECT)
     date_created = models.DateTimeField(auto_now=True)
-    drug_name = models.ForeignKey('components.Drug', related_name='drug_remove', on_delete=models.PROTECT, default=0, limit_choices_to={'is_active_safe': True})
+    drug_name = models.ForeignKey('components.Drug', related_name='drug_remove', on_delete=models.PROTECT, default=0, limit_choices_to={'is_active_safe': True}, blank=True, null=True)
     amount_removed = models.IntegerField(blank=True, null=True)
     amount_added = models.IntegerField(blank=True, null=True)
     amount_in_safe = models.IntegerField(blank=True, null=True)

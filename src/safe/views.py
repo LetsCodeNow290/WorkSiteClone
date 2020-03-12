@@ -121,6 +121,9 @@ def check_safe_view(request):
                 instance.save()
                 count+=1
             formset.save()
+            text_instance = textset.save(commit=False)
+            text_instance.user = request.user
+            text_instance.drug_name = Drug.objects.get(name="Free Text")
             textset.save()
 
         return redirect('safe_home_view')

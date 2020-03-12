@@ -65,7 +65,11 @@ def narc_check_view(request):
                 instance.save()
                 count+=1
             formset.save()
-            seal_form.save()
+            text_instance = textset.save(commit=False)
+            text_instance.user = request.user
+            text_instance.narc_medic_unit_number = MedicUnit.objects.get(pk=request.session['unit_name']['id'])
+            text_instance.seal_number = request.session['seal_number']
+            text_instance.narcotic_name = Drug.objects.get(name="Free Text")
             textset.save()
 
         return redirect('check_home_view')
@@ -89,3 +93,5 @@ def daily_view(request):
 
 def weekly_view(request):
     return render(request, 'checks/weekly_check.html')
+
+#class WeeklyCheckView(CreateView):
