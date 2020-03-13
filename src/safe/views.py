@@ -13,6 +13,7 @@ from django.db import transaction
 from .forms import DrugSearch, SafeCheckFormSet, SafeCheckForm, SafeCheckFreeText
 import django_filters
 from extra_views import ModelFormSetView
+
 # Create your views here.
 
 
@@ -20,7 +21,8 @@ from extra_views import ModelFormSetView
 @permission_required('safe.can_view')
 def safe_home_view(request):
     drugs = Safe.calc_total(Safe)
-    context = {'drugs' : drugs}
+    checked = Safe.objects.last()
+    context = {'drugs' : drugs, 'checked': checked}
     return render(request, 'safe/safe_home.html', context)
 
 class AddDrug(LoginRequiredMixin, PermissionRequiredMixin ,CreateView, AccessMixin):
@@ -53,11 +55,12 @@ class SubDrug(LoginRequiredMixin,CreateView):
         'free_text'
         ]
     success_url = '/safe'
-# These bits of code are making the "amount removed" category required
+
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
-
+        
+# This bit of code is making the "amount removed" category required
     def get_form(self, form_class=None):
         form = super(SubDrug, self).get_form(form_class)
         form.fields['amount_removed'].required = True
@@ -83,26 +86,6 @@ class CheckDrug(LoginRequiredMixin,CreateView):
         form = super(CheckDrug, self).get_form(form_class)
         form.fields['amount_in_safe'].required = True
         return form
-
-
-# class SafeCheck(ModelFormSetView):
-#     model = Safe
-#     template_name = 'safe/safe_check_formset_view.html'
-#     fields = ['drug_name', 'amount_in_safe']
-#     success_url = '/safe/check'
-#     factory_kwargs = {'extra' : len(Drug.objects.filter(is_active_safe=True))}
-    
-
-#     def formset_valid(self, formset):
-#         print(dir(formset))
-#         formset.instance.user = self.request.user
-#         return super().formset_valid(formset)
-
-#     def get_queryset(self):
-#         return super().get_queryset().none()
-    
-#     def get_initial(self):
-#         return super().get_initial()
 
 
 def check_safe_view(request):

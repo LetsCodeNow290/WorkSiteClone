@@ -9,7 +9,7 @@ from .forms import ChooseMedicUnit, NarcSealForm, NarcCheckFormSet, RSICheckForm
 from django.forms.models import model_to_dict
 from django.http import JsonResponse
 from components.models import MedicUnit, Drug
-from django.db.models import Sum, Max
+from blog.models import Post
 
 
 # Create your views here.
@@ -19,7 +19,6 @@ def check_home_view(request):
         if form.is_valid():
             unit_name = form.cleaned_data.get('medic_unit_number')
             request.session['unit_name'] = model_to_dict(unit_name)
-            print(request.session['unit_name']['unit_name'])
             return redirect('post_unit_view')
     else:
         form = ChooseMedicUnit()
@@ -73,7 +72,7 @@ def narc_check_view(request):
             text_instance.narcotic_name = Drug.objects.get(name="Free Text")
             textset.save()
 
-        return redirect('check_home_view')
+        return redirect('post_unit_view')
     else:
         display_unit = request.session['unit_name']['unit_name']
         context = {}
@@ -85,13 +84,30 @@ def narc_check_view(request):
         formset = NarcCheckFormSet(queryset=NarcBox.objects.none())
         drugset = Drug.objects.filter(is_active_unit=True)
         textset = NarcBoxFreeText()
-        context.update({'formset':formset, 'drugset':drugset, 'seal_form':seal_form, 'display_unit':display_unit, 'textset' : textset})
+        seal_number = NarcBox.objects.filter(narc_medic_unit_number=request.session['unit_name']['id']).order_by('-pk')[0]
+        context.update({'formset':formset, 'drugset':drugset, 'seal_form':seal_form, 'display_unit':display_unit, 'textset' : textset, 'seal_number':seal_number})
         
     return render(request, 'checks/narc_check.html', context)
 
 def post_unit_view(request):
-    daily_info = DailyCheck.objects.latest('free_text')
-    return render(request, 'checks/post_unit_view.html',{'daily_info':daily_info})
+    medic = request.session['unit_name']['unit_name']
+    context={}
+    try:
+        pass_on = Post.objects.last()
+        if pass_on.title == request.session['unit_name']['unit_name']:
+            context['pass_on'] = pass_on
+    except:
+        pass
+    try:
+        daily_info = DailyCheck.objects.filter(medic_unit_number=request.session['unit_name']['id']).order_by('-pk')[0]        
+        try:
+            second_daily_info = DailyCheck.objects.filter(medic_unit_number=request.session['unit_name']['id']).order_by('-pk')[1]
+            context.update({'daily_info':daily_info, 'second_daily_info':second_daily_info, 'medic':medic})
+        except:
+            context.update({'daily_info':daily_info, 'medic':medic})
+    except:
+        context.update({'medic':medic})
+    return render(request, 'checks/post_unit_view.html', context)
 
 class WeeklyCheckView(CreateView):
     model = WeeklyCheck
@@ -109,7 +125,7 @@ class WeeklyCheckView(CreateView):
         'passenger_rear_tire',
         'comments'
     ]
-    success_url = '/checks/'
+    success_url = '/checks/home/'
     template_name = 'checks/weekly_check_view.html'
     
     def form_valid(self, form):
@@ -120,3 +136,45 @@ class WeeklyCheckView(CreateView):
     def get_context_data(self, **kwargs):
         kwargs['medic_unit'] = self.request.session['unit_name']['unit_name']
         return super().get_context_data(**kwargs)
+
+class AddDrugNarcBox(CreateView):
+    model = NarcBox
+    template_name_suffix = '_add_narc'
+    fields = ['narcotic_name', 'amount_added_to_unit', 'seal_number','narc_box_free_text']
+    success_url = '/checks/home'
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        form.instance.narc_medic_unit_number = MedicUnit.objects.get(pk=self.request.session['unit_name']['id'])
+        return super().form_valid(form)
+
+    def get_form(self, form_class=None):
+        form = super(AddDrugNarcBox, self).get_form(form_class)
+        form.fields['amount_added_to_unit'].required = True
+        return form
+
+class SubDrugNarcBox(CreateView):
+    model = NarcBox
+    template_name_suffix = '_sub_narc'
+    fields = [
+        'narcotic_name',
+        'amount_given_to_patient',
+        'amount_removed_from_unit',
+        'amount_added_to_unit',
+        'incident_number',
+        'hospital',
+        'seal_number',
+        'narc_box_free_text'
+        ]
+    success_url = '/checks/home'
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        form.instance.narc_medic_unit_number = MedicUnit.objects.get(pk=self.request.session['unit_name']['id'])
+        return super().form_valid(form)
+        
+    # This bit of code is making the "amount removed" category required
+    def get_form(self, form_class=None):
+        form = super(SubDrugNarcBox, self).get_form(form_class)
+        form.fields['amount_removed_from_unit'].required = True
+        return form

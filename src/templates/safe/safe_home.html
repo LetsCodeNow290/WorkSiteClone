@@ -3,6 +3,7 @@
 {% block content %}
 <div>
     <h2>Narcotic Safe Home Page</h2>
+    <p>Last opened by {{ checked.user|title }}
     {% for key, value in drugs.items %}
     {% if key.is_active_safe %}
         <article class="media content-section">
@@ -11,7 +12,6 @@
             </div>
             </article>
     {% endif %}
-
     {% endfor %}
 </div>
 {% endblock %}

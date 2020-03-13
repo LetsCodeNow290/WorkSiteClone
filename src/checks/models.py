@@ -43,8 +43,8 @@ class NarcBox(models.Model):
     amount_removed_from_unit = models.IntegerField(blank=True, null=True, default=0)
     amount_added_to_unit = models.IntegerField(blank=True, null=True, default=0)
     amount_in_unit = models.IntegerField(blank=True, null=True, default=0)
-    incident_number = models.CharField(max_length=20)
-    hospital = models.CharField(max_length=50)
+    incident_number = models.CharField(max_length=20,blank=True, null=True)
+    hospital = models.CharField(max_length=50, blank=True, null=True)
     narc_box_free_text = models.TextField(default='', blank=True)
 
 FLUID_CHOICES = (

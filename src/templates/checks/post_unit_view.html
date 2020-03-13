@@ -1,10 +1,35 @@
 {% extends 'checks/check_base.html' %}
 {% block content %}
 <fieldset class='content-section'>
-    <h2>Medic Unit Home Page</h2>
+    <h1>{{ medic }} Home Page</h1>
+    <fieldset class='content-section'>
+        <h3>Unit Actions</h3>
     <a href="{% url 'daily' %}">Daily</a><br>
     <a href="{% url 'weekly' %}">Weekly</a><br>
-    <a href="{% url 'narc_daily' %}">Check narc box</a>
-    <h2>{{ daily_info.free_text }}</h2>
+    <a href="{% url 'narc_daily' %}">Check narc box</a><br>
+    <a href="{% url 'narc_add' %}">Add drugs to the narc box</a><br>
+    <a href="{% url 'narc_sub' %}">Remove drugs from the narc box</a>
+    </fieldset>
+    {% if daily_info.free_text %}
+    <fieldset class='content-section'>
+    <h3>Daily Check Notes for {{ daily_info.record_date|date:"SHORT_DATE_FORMAT"}}</h3>
+    {{ daily_info.free_text }}</fieldset>
+    {% endif %}
+    {% if second_daily_info.free_text %}
+    <fieldset class='content-section'>
+    <h3>Daily Check Notes for {{ second_daily_info.record_date|date:"SHORT_DATE_FORMAT"}}</h3>    
+    {{ second_daily_info.free_text }}</fieldset>
+    {% endif %}
+    {% if pass_on %}
+    <article class="media content-section">
+            <div class="media-body">
+                <div class="article-metadata">
+                <a class="mr-2" href="{% url 'user_posts' pass_on.author.username %}">{{ pass_on.author }}</a>
+                </div>
+                <h2><a class="article-title" href="{% url 'blog_detail' pass_on.id %}">{{ pass_on.title }} {{ pass_on.date_posted|date:"DATE_FORMAT" }}</a></h2>
+                <p class="article-content">{{ pass_on.content }}</p>
+            </div>
+            </article>
+            {% endif %}
 </fieldset>
 {% endblock %}
