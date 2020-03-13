@@ -93,9 +93,8 @@ def post_unit_view(request):
     medic = request.session['unit_name']['unit_name']
     context={}
     try:
-        pass_on = Post.objects.last()
-        if pass_on.title == request.session['unit_name']['unit_name']:
-            context['pass_on'] = pass_on
+        pass_on = Post.objects.filter(title=request.session['unit_name']['unit_name']).last()
+        context['pass_on'] = pass_on
     except:
         pass
     try:
