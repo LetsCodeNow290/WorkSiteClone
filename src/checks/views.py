@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import DailyCheck, NarcBox,RSIBag, WeeklyCheck
-from .forms import ChooseMedicUnit, NarcSealForm, NarcCheckFormSet, RSICheckForm, NarcBoxFreeText
+from .forms import ChooseMedicUnit, NarcSealForm, NarcCheckFormSet, RSICheckForm, NarcBoxFreeText, SubDrugForm
 from django.forms.models import model_to_dict
 from django.http import JsonResponse
 from components.models import MedicUnit, Drug
@@ -98,6 +98,11 @@ def post_unit_view(request):
     except:
         pass
     try:
+        weekly = WeeklyCheck.objects.filter(weekly_unit_number=request.session['unit_name']['id']).order_by('-pk')[0]
+        context['weekly'] = weekly
+    except:
+        pass
+    try:
         daily_info = DailyCheck.objects.filter(medic_unit_number=request.session['unit_name']['id']).order_by('-pk')[0]        
         try:
             second_daily_info = DailyCheck.objects.filter(medic_unit_number=request.session['unit_name']['id']).order_by('-pk')[1]
@@ -136,6 +141,11 @@ class WeeklyCheckView(CreateView):
         kwargs['medic_unit'] = self.request.session['unit_name']['unit_name']
         return super().get_context_data(**kwargs)
 
+    def get_form(self, form_class=None):
+        form = super(WeeklyCheckView, self).get_form(form_class)
+        form.fields['comments'].required = True
+        return form
+
 class AddDrugNarcBox(CreateView):
     model = NarcBox
     template_name_suffix = '_add_narc'
@@ -154,7 +164,6 @@ class AddDrugNarcBox(CreateView):
 
 class SubDrugNarcBox(CreateView):
     model = NarcBox
-    template_name_suffix = '_sub_narc'
     fields = [
         'narcotic_name',
         'amount_given_to_patient',
@@ -165,7 +174,9 @@ class SubDrugNarcBox(CreateView):
         'seal_number',
         'narc_box_free_text'
         ]
+    #form_class = SubDrugForm
     success_url = '/checks/home'
+    template_name_suffix = '_sub_narc'
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -176,4 +187,5 @@ class SubDrugNarcBox(CreateView):
     def get_form(self, form_class=None):
         form = super(SubDrugNarcBox, self).get_form(form_class)
         form.fields['amount_removed_from_unit'].required = True
+        form.fields['amount_added_to_unit'].required = True
         return form

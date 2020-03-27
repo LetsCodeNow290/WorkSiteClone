@@ -42,3 +42,17 @@ class NarcBoxFreeText(forms.ModelForm):
     #     'narc_box_free_text': Textarea(attrs={'rows':2, 'cols':20}),
     #   }
     labels = {'narc_box_free_text' : 'Free Text'}
+
+class SubDrugForm(forms.ModelForm):
+  class Meta:
+    model = NarcBox
+    fields = [
+        'narcotic_name',
+        'amount_given_to_patient',
+        'amount_removed_from_unit',
+        'amount_added_to_unit',
+        'incident_number',
+        'hospital',
+        'seal_number',
+        'narc_box_free_text'
+        ]

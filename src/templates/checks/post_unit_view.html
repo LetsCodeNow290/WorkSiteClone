@@ -20,6 +20,11 @@
     <h3>Daily Check Notes for {{ second_daily_info.record_date|date:"SHORT_DATE_FORMAT"}}</h3>    
     {{ second_daily_info.free_text }}</fieldset>
     {% endif %}
+    {% if weekly.comments %}
+    <fieldset class='content-section'>
+    <h3>Weekly Check Notes for {{ weekly.weekly_record_date|date:"SHORT_DATE_FORMAT"}}</h3>
+    {{ weekly.comments }}</fieldset>
+    {% endif %}
     {% if pass_on %}
     <article class="media content-section">
             <div class="media-body">
