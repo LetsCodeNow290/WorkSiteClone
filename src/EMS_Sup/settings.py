@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+import django_heroku
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -130,6 +131,8 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 
 #These next lines change the media storing directory so that they don't clutter up the root directory space
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -167,3 +170,5 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'jesse.mckittrick@gmail.com' #os.environ.get('EMAIL_USER')
 EMAIL_HOST_PASSWORD = 'tylxeqoxrbpgozre' #os.environ.get('EMAIL_PASSWORD')
+
+django_heroku.settings(locals())
