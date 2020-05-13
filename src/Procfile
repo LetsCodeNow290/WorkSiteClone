@@ -1,1 +1,1 @@
-web: gunicorn src/EMS_Sup.wsgi
+web: gunicorn EMS_Sup.wsgi
