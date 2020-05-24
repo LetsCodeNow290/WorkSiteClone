@@ -23,7 +23,7 @@ class NarcCheckForm(forms.ModelForm):
       fields = ['amount_in_unit']
       
 
-NarcCheckFormSet = modelformset_factory(NarcBox, form=NarcCheckForm, fields=('amount_in_unit',), extra = len(Drug.objects.filter(is_active_unit=True)))
+NarcCheckFormSet = modelformset_factory(NarcBox, form=NarcCheckForm, fields=('amount_in_unit',), extra = 5)
 
 class RSICheckForm(forms.ModelForm):
     class Meta:

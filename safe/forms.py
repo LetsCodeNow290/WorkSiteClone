@@ -20,7 +20,7 @@ class SafeCheckForm(forms.ModelForm):
           'free_text': Textarea(attrs={'rows':2, 'cols':20}),
         }
 
-SafeCheckFormSet = modelformset_factory(Safe, form=SafeCheckForm, fields=('amount_in_safe',), extra = len(Drug.objects.filter(is_active_safe=True)))
+SafeCheckFormSet = modelformset_factory(Safe, form=SafeCheckForm, fields=('amount_in_safe',), extra = 5)
 
 class SafeCheckFreeText(forms.ModelForm):
 
