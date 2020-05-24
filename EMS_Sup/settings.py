@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'computed_property',
     'extra_views',
+    'django_extensions',
     
 
     #own apps
@@ -88,9 +89,17 @@ WSGI_APPLICATION = 'EMS_Sup.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'work_check',
+        'USER': 'jesse_work',
+        'PASSWORD': 'Badleo8003!',
+        'HOST': 'localhost',
+        'PORT': '',
     }
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    # }
 }
 
 
