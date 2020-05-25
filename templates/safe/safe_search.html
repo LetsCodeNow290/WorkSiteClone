@@ -11,7 +11,7 @@
     {% for obj in filter.qs %}
     <article class="media content-section" style="background-color: antiquewhite">
     <div class="media-body">
-        <p>{{ obj.user|title }} | {{ obj.date_created}} | {{ obj.id }} {% if obj.drug_name|stringformat:"s" == 'Free Text' %} <br> Daily Check Free Text Only
+        <p>{{ obj.user|title }} | {{ obj.date_created}} | {{ obj.id }} {% if obj.drug_name|stringformat:"s" == 'Free Text' %} <br> Safe Check Free Text Only
         {% else %} <br> Drug: {{ obj.drug_name }}  {% endif %}{% if obj.amount_in_safe == None %}
         {% else %} <br> Amount in the Safe: {{ obj.amount_in_safe }} mg {% endif %} {% if obj.amount_removed == None %}
         {% else %} <br> Removed:  {{ obj.amount_removed }} mg {% endif %}  {% if obj.amount_added == None %}

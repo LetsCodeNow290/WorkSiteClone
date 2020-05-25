@@ -10,6 +10,7 @@
         <fieldset class='form-group'>
             {% if RSI_check %}
             <legend class="border-bottom mb-4">Enter your RSI daily check</legend>
+            <div>The last recorded seal number was: <h3>{{ RSI_seal_number.RSI_seal_number }}</h3></div>
             {{ RSI_check|crispy }}
             {% endif %}
             <legend class="border-bottom mb-4">Enter your Narc Box seal number</legend>

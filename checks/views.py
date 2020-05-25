@@ -68,7 +68,11 @@ def narc_check_view(request):
             text_instance.user = request.user
             text_instance.narc_medic_unit_number = MedicUnit.objects.get(pk=request.session['unit_name']['id'])
             text_instance.seal_number = request.session['seal_number']
-            text_instance.narcotic_name = Drug.objects.get(name="Free Text")
+            try:
+                text_instance.narcotic_name = Drug.objects.get(name="Free Text")
+            except:
+                Drug.objects.create(name='Free Text', is_active_safe=False, is_active_unit=False)
+                text_instance.narcotic_name = Drug.objects.get(name="Free Text")
             textset.save()
 
         return redirect('post_unit_view')
@@ -80,11 +84,21 @@ def narc_check_view(request):
             context.update({'RSI_check': RSI_check})
         seal_form = NarcSealForm(request.POST or None)
         # Notice below the "queryset" is equal to none. This is done so the only fields that render are the "extra" fields from the formset. Otherwise all of the old form records will populate.
-        formset = NarcCheckFormSet(queryset=NarcBox.objects.none())
+        try:
+            formset = NarcCheckFormSet(queryset=NarcBox.objects.none())
+        except:
+            formset = NarcBox.objects.none()
         drugset = Drug.objects.filter(is_active_unit=True)
         textset = NarcBoxFreeText()
-        seal_number = NarcBox.objects.filter(narc_medic_unit_number=request.session['unit_name']['id']).order_by('-pk')[0]
-        context.update({'formset':formset, 'drugset':drugset, 'seal_form':seal_form, 'display_unit':display_unit, 'textset' : textset, 'seal_number':seal_number})
+        try:
+            seal_number = NarcBox.objects.filter(narc_medic_unit_number=request.session['unit_name']['id']).order_by('-pk')[0]
+        except:
+            seal_number = 0
+        try:
+            RSI_seal_number = RSIBag.objects.order_by('pk')[0]
+        except:
+            RSI_seal_number = 0
+        context.update({'formset':formset, 'drugset':drugset, 'seal_form':seal_form, 'display_unit':display_unit, 'textset' : textset, 'seal_number':seal_number, 'RSI_seal_number':RSI_seal_number})
         
     return render(request, 'checks/narc_check.html', context)
 

@@ -106,13 +106,20 @@ def check_safe_view(request):
             formset.save()
             text_instance = textset.save(commit=False)
             text_instance.user = request.user
-            text_instance.drug_name = Drug.objects.get(name="Free Text")
+            try:
+                text_instance.drug_name = Drug.objects.get(name="Free Text")
+            except:
+                Drug.objects.create(name='Free Text', is_active_safe=False, is_active_unit=False)
+                text_instance.drug_name = Drug.objects.get(name="Free Text")
             textset.save()
 
         return redirect('safe_home_view')
     else:
         #These next datasets will send the correct drug name and form to the template
-        formset = SafeCheckFormSet(queryset=Safe.objects.none())
+        try:
+            formset = SafeCheckFormSet(queryset=Safe.objects.none())
+        except:
+            formset = Safe.objects.none()
         drugs = Drug.objects.filter(is_active_safe=True)
         object_list = Safe.calc_total(Safe)
         drugset = {}
