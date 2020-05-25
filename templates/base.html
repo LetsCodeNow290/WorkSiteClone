@@ -27,7 +27,6 @@
             <div class="collapse navbar-collapse" id="navbarToggle">
                 <div class="navbar-nav mr-auto">
                 <a class="nav-item nav-link" href="{% url 'home' %}">Home</a>
-                <a class="nav-item nav-link" href="{% url 'safe_home_view' %}">Narc Safe</a>
                 <a class="nav-item nav-link" href="{% url 'check_home_view' %}">Units</a>
                 <a class="nav-item nav-link" href="{% url 'component_home_view' %}">Manage</a>
                 <a class="nav-item nav-link" href="{% url 'blog' %}">Pass On</a>
@@ -65,13 +64,11 @@
             {% if request.get_full_path == '/' %}
                 <div class="col-md-4">
                 <div class="content-section">
-                    <h3>Additional Information</h3>
-                    <p class='text-muted'>You can put any information here you'd like.
+                    <h3>Actions</h3>
                     <ul class="list-group">
-                        <li class="list-group-item list-group-item-light">Latest Posts</li>
-                        <li class="list-group-item list-group-item-light">Announcements</li>
-                        <li class="list-group-item list-group-item-light">Calendars</li>
-                        <li class="list-group-item list-group-item-light">etc</li>
+                        <a class="nav-item nav-link" href="{% url 'register' %}"><li class="list-group-item list-group-item-light">Register a New User</li></a>
+                        <a class="nav-item nav-link" href="{% url 'check_home_view' %}"><li class="list-group-item list-group-item-light">Perform a Unit Check</li></a>
+                        <a class="nav-item nav-link" href="{% url 'safe_home_view' %}"><li class="list-group-item list-group-item-light">Check the Safe</li></a>
                     </ul>
                     </p>
             {% else %}

@@ -31,7 +31,10 @@ class UnitListView(LoginRequiredMixin, ListView):
     ordering = ['unit_number']
 
     def get_context_data(self, **kwargs):
-        kwargs['mileage_list'] = Vehicle.get_mileage(Vehicle)
+        try:
+            kwargs['mileage_list'] = Vehicle.get_mileage(Vehicle)
+        except:
+            kwargs['mileage_list'] = 0
         return super(UnitListView, self).get_context_data(**kwargs)
 
 class UnitDetailView(LoginRequiredMixin, DetailView):
