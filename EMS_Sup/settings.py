@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import os
 import django_heroku
 
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -61,6 +62,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'EMS_Sup.middleware.LogInRequiredMiddleware',
 ]
 
 ROOT_URLCONF = 'EMS_Sup.urls'
@@ -160,6 +162,7 @@ LOGIN_URL = 'login'
 #Middleware.py redirects all unauthenticated traffic to the login page
 LOGIN_EXEMPT_URLS = (
     'logout',
+    'home',
     'password_reset',
     'password_done',
     'password_confirm'
