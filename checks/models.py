@@ -25,6 +25,7 @@ class DailyCheck(models.Model):
 
 class RSIBag(models.Model):
     user = models.ForeignKey(User, on_delete=models.PROTECT)
+    RSI_unit_number = models.ForeignKey('components.MedicUnit', related_name='RSI_unit_number', on_delete=models.PROTECT, default='')
     record_date = models.DateTimeField(auto_now=True)
     RSI_seal_number = models.IntegerField()
     next_expiration_date = models.DateField(default=datetime.now)

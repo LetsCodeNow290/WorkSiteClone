@@ -44,7 +44,8 @@ def narc_check_view(request):
             RSI_check = RSICheckForm(request.POST or None)
             if RSI_check.is_valid():
                 instance = RSI_check.save(commit=False)
-                instance.user = request.user  
+                instance.user = request.user
+                instance.RSI_unit_number = MedicUnit.objects.get(pk=request.session['unit_name']['id'])
                 instance.save()
         seal_form = NarcSealForm(request.POST or None)
         formset = NarcCheckFormSet(request.POST or None)
@@ -95,7 +96,7 @@ def narc_check_view(request):
         except:
             seal_number = 0
         try:
-            RSI_seal_number = RSIBag.objects.order_by('pk')[0]
+            RSI_seal_number = RSIBag.objects.filter(RSI_unit_number=request.session['unit_name']['id']).order_by('-pk')[0]
         except:
             RSI_seal_number = 0
         context.update({'formset':formset, 'drugset':drugset, 'seal_form':seal_form, 'display_unit':display_unit, 'textset' : textset, 'seal_number':seal_number, 'RSI_seal_number':RSI_seal_number})
