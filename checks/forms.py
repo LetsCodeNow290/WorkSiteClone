@@ -56,3 +56,6 @@ class SubDrugForm(forms.ModelForm):
         'seal_number',
         'narc_box_free_text'
         ]
+    labels = {
+      'seal_number' : 'New seal number'
+    }

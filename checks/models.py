@@ -19,7 +19,7 @@ class DailyCheck(models.Model):
     RTF_bag = models.BooleanField()
     suction = models.BooleanField()
     oxygen = models.BooleanField()
-    free_text = models.TextField(default='')
+    free_text = models.TextField(default='', blank=True)
 
     #Need to fix all the templates for the vehicles
 
@@ -32,7 +32,8 @@ class RSIBag(models.Model):
     incident_number = models.CharField(max_length=20, blank=True, null=True)
     hospital = models.CharField(max_length=50, blank=True, null=True)
     contact_EMS_Chief = models.DateTimeField(default=datetime.now, blank=True, null=True)
-    free_text = models.TextField(default='')
+    free_text = models.TextField(default='', blank=True)
+    # add RSI form
 
 class NarcBox(models.Model):
     narc_medic_unit_number = models.ForeignKey('components.MedicUnit', related_name='narc_medic_unit_number', on_delete=models.PROTECT, default='')
@@ -47,6 +48,8 @@ class NarcBox(models.Model):
     incident_number = models.CharField(max_length=20,blank=True, null=True)
     hospital = models.CharField(max_length=50, blank=True, null=True)
     narc_box_free_text = models.TextField(default='', blank=True)
+    #add waste narcs box
+    #add waste witness
 
 FLUID_CHOICES = (
     ('Within Range', 'Within Range'),
@@ -54,8 +57,8 @@ FLUID_CHOICES = (
 )
 TIRE_CHOICES = (
     ('Full','Full'),
-    ('Low', 'Low'),
-    ('Flat', 'Flat')
+    ('Low - added air', 'Low - added air'),
+    ('Flat - added air', 'Flat - added air')
 )
 
 class WeeklyCheck(models.Model):

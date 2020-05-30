@@ -107,6 +107,15 @@ def post_unit_view(request):
     medic = request.session['unit_name']['unit_name']
     context={}
     try:
+        seal_number = NarcBox.objects.filter(narc_medic_unit_number=request.session['unit_name']['id']).order_by('-pk')[0]
+    except:
+        seal_number = 0
+    try:
+        RSI_seal_number = RSIBag.objects.filter(RSI_unit_number=request.session['unit_name']['id']).order_by('-pk')[0]
+    except:
+        RSI_seal_number = 0
+    context.update({'narc_seal_number': seal_number, 'RSI_seal_number' : RSI_seal_number})
+    try:
         pass_on = Post.objects.filter(title=request.session['unit_name']['unit_name']).last()
         context['pass_on'] = pass_on
     except:

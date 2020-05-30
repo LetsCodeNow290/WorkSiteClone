@@ -2,14 +2,30 @@
 {% block content %}
 <fieldset class='content-section'>
     <h1>{{ medic }} Home Page</h1>
+    <h3>Current Drug Box Seal Number: {{ narc_seal_number.seal_number }}</h3>
+    {% if RSI_seal_number %}
+    <h3>Current RSI Seal Number: {{ RSI_seal_number.RSI_seal_number }}</h3>
+    {% endif %}
+    <br>
     <fieldset class='content-section'>
         <h3>Unit Actions</h3>
     <a href="{% url 'daily' %}">Daily</a><br>
     <a href="{% url 'weekly' %}">Weekly</a><br>
     <a href="{% url 'narc_daily' %}">Check narc box</a><br>
-    <a href="{% url 'narc_add' %}">Add drugs to the narc box</a><br>
-    <a href="{% url 'narc_sub' %}">Remove drugs from the narc box</a>
+    {% comment %} <a href="{% url 'narc_add' %}">Add drugs to the narc box</a><br> {% endcomment %}
+    <a href="{% url 'narc_sub' %}">Remove/Use drugs from the narc box</a>
     </fieldset>
+     {% if pass_on %}
+    <article class="media content-section">
+            <div class="media-body">
+                <div class="article-metadata">
+                <a class="mr-2" href="{% url 'user_posts' pass_on.author.username %}">{{ pass_on.author }}</a>
+                </div>
+                <h2><a class="article-title" href="{% url 'blog_detail' pass_on.id %}">{{ pass_on.title }} {{ pass_on.date_posted|date:"DATE_FORMAT" }}</a></h2>
+                <p class="article-content">{{ pass_on.content }}</p>
+            </div>
+            </article>
+            {% endif %}
     {% if daily_info.free_text %}
     <fieldset class='content-section'>
     <h3>Daily Check Notes for {{ daily_info.record_date|date:"SHORT_DATE_FORMAT"}}</h3>
@@ -25,16 +41,6 @@
     <h3>Weekly Check Notes for {{ weekly.weekly_record_date|date:"SHORT_DATE_FORMAT"}}</h3>
     {{ weekly.comments }}</fieldset>
     {% endif %}
-    {% if pass_on %}
-    <article class="media content-section">
-            <div class="media-body">
-                <div class="article-metadata">
-                <a class="mr-2" href="{% url 'user_posts' pass_on.author.username %}">{{ pass_on.author }}</a>
-                </div>
-                <h2><a class="article-title" href="{% url 'blog_detail' pass_on.id %}">{{ pass_on.title }} {{ pass_on.date_posted|date:"DATE_FORMAT" }}</a></h2>
-                <p class="article-content">{{ pass_on.content }}</p>
-            </div>
-            </article>
-            {% endif %}
+   
 </fieldset>
 {% endblock %}
